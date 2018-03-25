@@ -2,7 +2,6 @@ package com.watshoulditake.waltermao.coursesapp.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
@@ -13,11 +12,11 @@ import android.widget.TextView;
 import com.watshoulditake.waltermao.coursesapp.R;
 import com.watshoulditake.waltermao.coursesapp.loaders.GetCourseAboutLoader;
 import com.watshoulditake.waltermao.coursesapp.model.Course;
+import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
 
-public class CourseAboutFragment extends Fragment {
+public class CourseAboutFragment extends BaseCourseFragment {
 
     private static final String LOG_TAG = CourseAboutFragment.class.getSimpleName();
-    private static final String COURSE_CODE_ARG = "course_code";
     private static final int GET_COURSE_ABOUT_LOADER_ID = 532;
     private Course mCourse;
 
@@ -29,14 +28,6 @@ public class CourseAboutFragment extends Fragment {
     private TextView mIsOnline;
     private TextView mInstructions;
     private TextView mWebUrl;
-
-    public static CourseAboutFragment createFragment(String courseCode) {
-        CourseAboutFragment fragment = new CourseAboutFragment();
-        Bundle args = new Bundle();
-        args.putString(COURSE_CODE_ARG,courseCode);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Nullable
     @Override
@@ -60,7 +51,8 @@ public class CourseAboutFragment extends Fragment {
         getLoaderManager().initLoader(GET_COURSE_ABOUT_LOADER_ID, getArguments(), new LoaderManager.LoaderCallbacks<Course>() {
             @Override
             public Loader<Course> onCreateLoader(int id, Bundle args) {
-                return new GetCourseAboutLoader(getContext(),args.getString(COURSE_CODE_ARG));
+                CourseSummary summary = args.getParcelable(COURSE_SUMMARY_ARG);
+                return new GetCourseAboutLoader(getContext(),summary.getCourseCode());
             }
 
             @Override

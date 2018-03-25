@@ -14,13 +14,14 @@ public class BaseActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = BaseActivity.class.getSimpleName();
 
-    private List<CourseSummary> summaries;
+    private List<CourseSummary> summaries; // testing
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
 
+        // testing
         summaries = CoursesDao.getInstance(this).querySubject("CS");
         startFragment();
 
@@ -30,7 +31,7 @@ public class BaseActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         if(fm.findFragmentById(R.id.fragment_container) == null) {
             fm.beginTransaction()
-                    .add(R.id.fragment_container,CourseDetailFragment.createFragment(summaries.get(5)))
+                    .add(R.id.fragment_container,CourseDetailFragment.createFragment(new CourseDetailFragment(),summaries.get(5)))
                     .commit();
         }
     }

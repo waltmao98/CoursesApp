@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,23 +18,14 @@ import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
 
 import java.lang.ref.WeakReference;
 
-public class CourseDetailFragment extends Fragment {
+public class CourseDetailFragment extends BaseCourseFragment {
 
     private static final String LOG_TAG = CourseDetailFragment.class.getSimpleName();
-    private static final String COURSE_SUMMARY_ARG = "course_code";
 
     private CourseSummary mCourseSummary;
     private ViewPager mViewPager;
     private CoursePagerAdapter mPagerAdapter;
     private TabLayout mTabLayout;
-
-    public static CourseDetailFragment createFragment(CourseSummary courseSummary) {
-        CourseDetailFragment fragment = new CourseDetailFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(COURSE_SUMMARY_ARG,courseSummary);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Nullable
     @Override
@@ -60,14 +52,14 @@ public class CourseDetailFragment extends Fragment {
         mTabLayout.setupWithViewPager(mViewPager);
     }
 
-    private static class CoursePagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
+    private static class CoursePagerAdapter extends FragmentPagerAdapter {
 
         private static final int NUM_ITEMS = 4;
 
         private CourseSummary mCourseSummary;
         private WeakReference<Context> mContextReference;
 
-        public CoursePagerAdapter(CourseSummary courseSummary, FragmentManager fm, Context context) {
+        CoursePagerAdapter(CourseSummary courseSummary, FragmentManager fm, Context context) {
             super(fm);
             mCourseSummary = courseSummary;
             mContextReference = new WeakReference<>(context);
@@ -77,7 +69,7 @@ public class CourseDetailFragment extends Fragment {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return CourseAboutFragment.createFragment(mCourseSummary.getCourseCode());
+                    return BaseCourseFragment.createFragment(new CourseAboutFragment(),mCourseSummary);
                 case 1:
                     return new PrereqsFragment();
                 case 2:
