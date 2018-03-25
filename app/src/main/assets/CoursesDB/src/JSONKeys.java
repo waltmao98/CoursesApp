@@ -1,0 +1,19 @@
+public interface JSONKeys {
+    String STATUS = "status";
+    String META = "meta";
+    String DATA = "data";
+    String SUBJECT = "subject";
+    String CATALOG_NUMBER = "catalog_number";
+    String TITLE = "title";
+    String UNITS = "units";
+    String DESCRIPTION = "description";
+    String INSTRUCTIONS = "instructions";
+    String PREREQS = "prerequisites";
+    String ANTIREQS = "antirequisites";
+    String TERMS_OFFERED = "terms_offered";
+    String NOTES = "notes";
+    String OFFERINGS = "offerings";
+    String ONLINE = "online";
+    String URL = "url";
+    String PREREQS_PARSED = "prerequisites_parsed";
+}

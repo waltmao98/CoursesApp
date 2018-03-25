@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">CoursesApp</string>
+    <string name="about_tab_title">About</string>
+    <string name="schedule_tab_title">Schedule</string>
+    <string name="future_courses">Wat Can I Take?</string>
+    <string name="terms_offered">Terms Offered</string>
+    <string name="offered_online">Offered Online</string>
+    <string name="units">Units</string>
+    <string name="instructions">Instructions</string>
+    <string name="prerequisites">Prerequisites</string>
+    <string name="description">Description</string>
+    <string name="antirequisites">Antirequisites</string>
+    <string name="web_url">Web URL</string>
+    <string name="prereqs">Prereqs</string>
+</resources>
