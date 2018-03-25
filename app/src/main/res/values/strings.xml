@@ -12,4 +12,7 @@
     <string name="antirequisites">Antirequisites</string>
     <string name="web_url">Web URL</string>
     <string name="prereqs">Prereqs</string>
+    <string name="prereqs_list_description">Prerequisites for %s:</string>
+    <string name="future_courses_description">Here are some courses that require a successful completion of %s.</string>
+    <string name="empty_list_text">There are no courses that match this criteria.</string>
 </resources>

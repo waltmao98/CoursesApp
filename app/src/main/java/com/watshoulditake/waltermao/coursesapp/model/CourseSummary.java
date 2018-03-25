@@ -4,17 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class CourseSummary implements Parcelable {
-    public static final Creator<CourseSummary> CREATOR = new Creator<CourseSummary>() {
-        @Override
-        public CourseSummary createFromParcel(Parcel in) {
-            return new CourseSummary(in);
-        }
 
-        @Override
-        public CourseSummary[] newArray(int size) {
-            return new CourseSummary[size];
-        }
-    };
     private String mCourseCode;
     private String mTitle;
     private String mSubject;
@@ -58,8 +48,6 @@ public class CourseSummary implements Parcelable {
         return mCatalogNumber;
     }
 
-    ///////////////////////// PARCELABLE //////////////////////////////
-
     public void setCatalogNumber(String catalogNumber) {
         mCatalogNumber = catalogNumber;
     }
@@ -69,6 +57,7 @@ public class CourseSummary implements Parcelable {
         return other instanceof CourseSummary && mCourseCode.equals(((CourseSummary) other).getCourseCode());
     }
 
+    ///////////////////////// PARCELABLE //////////////////////////////
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(mCourseCode);
@@ -81,5 +70,17 @@ public class CourseSummary implements Parcelable {
     public int describeContents() {
         return 0;
     }
+
+    public static final Creator<CourseSummary> CREATOR = new Creator<CourseSummary>() {
+        @Override
+        public CourseSummary createFromParcel(Parcel in) {
+            return new CourseSummary(in);
+        }
+
+        @Override
+        public CourseSummary[] newArray(int size) {
+            return new CourseSummary[size];
+        }
+    };
 }
 

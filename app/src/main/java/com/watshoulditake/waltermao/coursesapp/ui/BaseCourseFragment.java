@@ -22,7 +22,7 @@ import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
 public abstract class BaseCourseFragment extends Fragment {
 
     static final String COURSE_SUMMARY_ARG = "course_summary_arg";
-    private static final String COURSE_CHANGED_ACTION = "com.watshoulditake.waltermao.coursesapp.broadcast.COURSE_CHANGED_ACTION";
+    static final String COURSE_CHANGED_ACTION = "com.watshoulditake.waltermao.coursesapp.broadcast.COURSE_CHANGED_ACTION";
 
     private CourseChangedReceiver mReceiver;
     private CourseSummary mCourseSummary;
@@ -67,13 +67,6 @@ public abstract class BaseCourseFragment extends Fragment {
 
     String getCourseCode() {
         return mCourseSummary.getCourseCode();
-    }
-
-    void sendCourseChangedBroadcast(CourseSummary courseSummary) {
-        Intent intent = new Intent();
-        intent.setAction(COURSE_CHANGED_ACTION);
-        intent.putExtra(COURSE_SUMMARY_ARG, courseSummary);
-        getContext().sendBroadcast(intent);
     }
 
     @CallSuper

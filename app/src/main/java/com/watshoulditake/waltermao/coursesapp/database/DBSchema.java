@@ -29,23 +29,30 @@ public class DBSchema {
         static final String URL = "url"; // link to UW website for official course info
         static final String FAVOURITE = "favourite";
 
-        static List<String> getColsList() {
-            return Arrays.asList(
-                    COURSE_CODE,
-                    TITLE, SUBJECT,
-                    CATOLOG_NUMBER,
-                    UNITS,
-                    DESCRIPTION,
-                    INSTRUCTIONS,
-                    PREREQS_STRING,
-                    ANTIREQS,
-                    PREREQS_LIST,
-                    FUTURE_COURSES_LIST,
-                    TERMS_OFFERED,
-                    NOTES,
-                    IS_ONLINE,
-                    URL,
-                    FAVOURITE);
-        }
+
+        static final List<String> ALL_COLS =
+                Arrays.asList(
+                        COURSE_CODE,
+                        TITLE, SUBJECT,
+                        CATOLOG_NUMBER,
+                        UNITS,
+                        DESCRIPTION,
+                        INSTRUCTIONS,
+                        PREREQS_STRING,
+                        ANTIREQS,
+                        PREREQS_LIST,
+                        FUTURE_COURSES_LIST,
+                        TERMS_OFFERED,
+                        NOTES,
+                        IS_ONLINE,
+                        URL,
+                        FAVOURITE);
+
+        static final String[] COURSE_SUMMARY_COLS = new String[]{
+                DBSchema.Cols.COURSE_CODE,
+                DBSchema.Cols.TITLE,
+                DBSchema.Cols.SUBJECT,
+                DBSchema.Cols.CATOLOG_NUMBER
+        };
     }
 }

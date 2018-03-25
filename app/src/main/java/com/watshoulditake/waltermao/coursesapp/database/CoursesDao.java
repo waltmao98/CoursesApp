@@ -8,6 +8,7 @@ import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
 
 import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -58,6 +59,19 @@ public class CoursesDao {
     }
 
     @WorkerThread
+    public CourseSummary getSingleCourseSummary(String courseCode) {
+        CourseCursorWrapper cursorWrapper = mDbHelper.queryCourses(
+                DBSchema.Cols.COURSE_SUMMARY_COLS,
+                DBSchema.Cols.COURSE_CODE + "=?",
+                new String[]{courseCode},
+                null,
+                null,
+                null
+        );
+        return cursorWrapper.getSingleCourseSummary();
+    }
+
+    @WorkerThread
     public List<CourseSummary> querySearchTerm(String searchTerm) {
         String sqlSearchTerm = "%" + searchTerm + "%";
         CourseCursorWrapper cursorWrapper = mDbHelper.queryCourses(null,
@@ -76,6 +90,12 @@ public class CoursesDao {
         return cursorWrapper.getCourseSummaries();
     }
 
+    /**
+     * @param courseCode course code of the course to look for
+     * @param column     column that contains a json array string
+     * @return course summaries list of the courses in the json array string
+     * @throws JSONException if given column is not a json array string
+     */
     @WorkerThread
     private List<CourseSummary> getJSONCourseSummaryList(String courseCode, String column) throws JSONException {
         CourseCursorWrapper cursorWrapper = mDbHelper.queryCourses(
@@ -85,7 +105,13 @@ public class CoursesDao {
                 null,
                 null,
                 null);
-        return cursorWrapper.getCourseSummariesFromJSON();
+        List<String> prereqCourseCodes = cursorWrapper.getCourseCodeStringsFromJSON();
+
+        List<CourseSummary> prereqs = new ArrayList<>();
+        for (String prereqCourseCode : prereqCourseCodes) {
+            prereqs.add(getSingleCourseSummary(prereqCourseCode));
+        }
+        return prereqs;
     }
 
 }

@@ -51,6 +51,7 @@ public class CourseDetailFragment extends BaseCourseFragment {
         mViewPager = view.findViewById(R.id.view_pager);
         mPagerAdapter = new CoursePagerAdapter(getCourseSummary(), getFragmentManager(), getContext());
         mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.setOffscreenPageLimit(mPagerAdapter.getCount() - 1);
         mTabLayout = view.findViewById(R.id.sliding_tabs);
         mTabLayout.setupWithViewPager(mViewPager);
     }
@@ -74,9 +75,9 @@ public class CourseDetailFragment extends BaseCourseFragment {
                 case 0:
                     return BaseCourseFragment.createFragment(new CourseAboutFragment(), mCourseSummary);
                 case 1:
-                    return new PrereqsFragment();
+                    return BaseCourseFragment.createFragment(new PrereqsFragment(), mCourseSummary);
                 case 2:
-                    return new FutureCoursesFragment();
+                    return BaseCourseFragment.createFragment(new FutureCoursesFragment(), mCourseSummary);
                 case 3:
                     return new CourseScheduleFragment();
                 default:

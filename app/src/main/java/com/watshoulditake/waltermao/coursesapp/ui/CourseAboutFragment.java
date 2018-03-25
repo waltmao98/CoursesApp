@@ -36,7 +36,7 @@ public class CourseAboutFragment extends BaseCourseFragment {
 
     @Override
     void updateData() {
-        getLoaderManager().initLoader(GET_COURSE_ABOUT_LOADER_ID,null,new CourseAboutLoaderCallbacks());
+        getLoaderManager().initLoader(GET_COURSE_ABOUT_LOADER_ID, null, new CourseAboutLoaderCallbacks());
     }
 
     @Override
