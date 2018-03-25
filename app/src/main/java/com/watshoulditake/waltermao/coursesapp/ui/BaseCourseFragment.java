@@ -43,6 +43,8 @@ public abstract class BaseCourseFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mCourseSummary = getArguments().getParcelable(COURSE_SUMMARY_ARG);
+        initialiseViews(view);
+        updateData();
     }
 
     @Override
@@ -77,10 +79,24 @@ public abstract class BaseCourseFragment extends Fragment {
     @CallSuper
     void receiveCourseChangedBroadcast(CourseSummary summary) {
         mCourseSummary = summary;
-        updateUI();
+        updateData();
     }
 
+    /**
+     * Re-fetches data associated with the current course summary
+     */
+    abstract void updateData();
+
+    /**
+     * Should be called once the data in updateData() has been fetched - somewhere in the method chain of
+     * a call to updateData()
+     */
     abstract void updateUI();
+
+    /**
+     * Get access to all views via rootView.findViewById
+     */
+    abstract void initialiseViews(View view);
 
     private class CourseChangedReceiver extends BroadcastReceiver {
         @Override

@@ -1,6 +1,7 @@
 package com.watshoulditake.waltermao.coursesapp.ui;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -10,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.watshoulditake.waltermao.coursesapp.R;
-import com.watshoulditake.waltermao.coursesapp.loaders.GetCourseAboutLoader;
+import com.watshoulditake.waltermao.coursesapp.loaders.CourseAboutLoader;
 import com.watshoulditake.waltermao.coursesapp.model.Course;
 
 public class CourseAboutFragment extends BaseCourseFragment {
@@ -29,40 +30,13 @@ public class CourseAboutFragment extends BaseCourseFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_course_about, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        mDescription = view.findViewById(R.id.description);
-        mPrereqs = view.findViewById(R.id.prereqs);
-        mTermsOffered = view.findViewById(R.id.terms_offered);
-        mUnits = view.findViewById(R.id.units);
-        mIsOnline = view.findViewById(R.id.is_online);
-        mInstructions = view.findViewById(R.id.instructions);
-        mAntiReqs = view.findViewById(R.id.antirequisites);
-        mWebUrl = view.findViewById(R.id.web_url);
-
-        getLoaderManager().initLoader(GET_COURSE_ABOUT_LOADER_ID, getArguments(), new LoaderManager.LoaderCallbacks<Course>() {
-            @Override
-            public Loader<Course> onCreateLoader(int id, Bundle args) {
-                return new GetCourseAboutLoader(getContext(), getCourseCode());
-            }
-
-            @Override
-            public void onLoadFinished(Loader<Course> loader, Course data) {
-                mCourse = data;
-                updateUI();
-            }
-
-            @Override
-            public void onLoaderReset(Loader<Course> loader) {
-
-            }
-        });
+    void updateData() {
+        getLoaderManager().initLoader(GET_COURSE_ABOUT_LOADER_ID,null,new CourseAboutLoaderCallbacks());
     }
 
     @Override
@@ -75,6 +49,37 @@ public class CourseAboutFragment extends BaseCourseFragment {
         mIsOnline.setText(mCourse.isOnline() ? "Yes" : "No");
         mInstructions.setText(mCourse.getInstructionsString());
         mWebUrl.setText(mCourse.getURL());
+    }
+
+    @Override
+    void initialiseViews(View view) {
+        mDescription = view.findViewById(R.id.description);
+        mPrereqs = view.findViewById(R.id.prereqs);
+        mTermsOffered = view.findViewById(R.id.terms_offered);
+        mUnits = view.findViewById(R.id.units);
+        mIsOnline = view.findViewById(R.id.is_online);
+        mInstructions = view.findViewById(R.id.instructions);
+        mAntiReqs = view.findViewById(R.id.antirequisites);
+        mWebUrl = view.findViewById(R.id.web_url);
+    }
+
+    private class CourseAboutLoaderCallbacks implements LoaderManager.LoaderCallbacks<Course> {
+        @NonNull
+        @Override
+        public Loader<Course> onCreateLoader(int id, Bundle args) {
+            return new CourseAboutLoader(getContext(), getCourseCode());
+        }
+
+        @Override
+        public void onLoadFinished(@NonNull Loader<Course> loader, Course data) {
+            mCourse = data;
+            updateUI();
+        }
+
+        @Override
+        public void onLoaderReset(@NonNull Loader<Course> loader) {
+
+        }
     }
 
 }

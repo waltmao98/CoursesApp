@@ -2,9 +2,9 @@ package com.watshoulditake.waltermao.coursesapp.loaders;
 
 import android.content.Context;
 
-public abstract class BaseCourseLoader<T> extends android.support.v4.content.AsyncTaskLoader<T> {
+public abstract class BaseLoader<T> extends android.support.v4.content.AsyncTaskLoader<T> {
 
-    public BaseCourseLoader(Context context) {
+    public BaseLoader(Context context) {
         super(context);
     }
 

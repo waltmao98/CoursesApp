@@ -33,9 +33,18 @@ public class CourseDetailFragment extends BaseCourseFragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    void updateData() {
+        updateUI();
+    }
 
+    @Override
+    void updateUI() {
+        mCourseCodeText.setText(getCourseCode());
+        mTitleText.setText(getCourseSummary().getTitle());
+    }
+
+    @Override
+    void initialiseViews(View view) {
         mCourseCodeText = view.findViewById(R.id.course_code);
         mTitleText = view.findViewById(R.id.course_title);
 
@@ -44,14 +53,6 @@ public class CourseDetailFragment extends BaseCourseFragment {
         mViewPager.setAdapter(mPagerAdapter);
         mTabLayout = view.findViewById(R.id.sliding_tabs);
         mTabLayout.setupWithViewPager(mViewPager);
-
-        updateUI();
-    }
-
-    @Override
-    void updateUI() {
-        mCourseCodeText.setText(getCourseCode());
-        mTitleText.setText(getCourseSummary().getTitle());
     }
 
     private static class CoursePagerAdapter extends FragmentPagerAdapter {
