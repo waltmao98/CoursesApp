@@ -1,6 +1,11 @@
 import com.google.gson.Gson;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +14,9 @@ import java.util.Map;
  * Helper class for accessing the courses.db (COURSES table)
  */
 public class CoursesDBHelper {
+
+    public static final String DB_NAME = "courses.db";
+    public static final String TABLE_NAME = "COURSES";
 
     /**
      * Sets a set of future courses via SQL update statement
@@ -124,6 +132,8 @@ public class CoursesDBHelper {
         execUpdateSQL(addColSQL);
     }
 
+    /////////////////////////// DB SCHEMA //////////////////////////////////
+
     /**
      * Creates the COURSES table
      */
@@ -138,54 +148,6 @@ public class CoursesDBHelper {
     public static void dropTable() {
         execUpdateSQL("DROP TABLE " + TABLE_NAME + ";");
     }
-
-    /////////////////////////// DB SCHEMA //////////////////////////////////
-
-    public static final String DB_NAME = "courses.db";
-    public static final String TABLE_NAME = "COURSES";
-
-    public static class Cols {
-        static final String COURSE_CODE = "course_code"; // CS246
-        static final String TITLE = "title"; // Object Oriented Software Development
-        static final String SUBJECT = "subject"; // CS
-        static final String CATOLOG_NUMBER = "cat_num"; // 246
-        static final String UNITS = "units";
-        static final String DESCRIPTION = "description";
-        static final String INSTRUCTIONS = "instructions";
-        static final String PREREQS_STRING = "prereqs_string"; // english description of prereqs
-        static final String ANTIREQS = "antireqs";
-        static final String PREREQS_LIST = "prereqs_list"; // list of prereqs in JSON string format
-        static final String FUTURE_COURSES_LIST = "future_courses_list";
-        static final String TERMS_OFFERED = "terms_offered";
-        static final String NOTES = "notes";
-        static final String IS_ONLINE = "is_online";
-        static final String URL = "url"; // link to UW website for official course info
-        static final String FAVOURITE = "favourite";
-
-        static List<String> getColsList() {
-            return Arrays.asList(
-                    COURSE_CODE,
-                    TITLE, SUBJECT,
-                    CATOLOG_NUMBER,
-                    UNITS,
-                    DESCRIPTION,
-                    INSTRUCTIONS,
-                    PREREQS_STRING,
-                    ANTIREQS,
-                    PREREQS_LIST,
-                    FUTURE_COURSES_LIST,
-                    TERMS_OFFERED,
-                    NOTES,
-                    IS_ONLINE,
-                    URL,
-                    FAVOURITE);
-        }
-
-        private Cols() {
-        }
-    }
-
-    /////////////////////////// SQL STATEMENT HELPERS ////////////////////
 
     /**
      * Sets the parameters for a course insert prepared statement
@@ -214,6 +176,8 @@ public class CoursesDBHelper {
         stmt.setInt(16, course.isFavourite() ? 1 : 0);
         return stmt;
     }
+
+    /////////////////////////// SQL STATEMENT HELPERS ////////////////////
 
     /**
      * @return prepared insert statement SQL string: INSERT INTO (column_names...) ... VALUES (?,?,?...?)
@@ -279,6 +243,47 @@ public class CoursesDBHelper {
         } catch (SQLException | ClassNotFoundException e) {
             System.out.println(sql);
             e.printStackTrace();
+        }
+    }
+
+    public static class Cols {
+        static final String COURSE_CODE = "course_code"; // CS246
+        static final String TITLE = "title"; // Object Oriented Software Development
+        static final String SUBJECT = "subject"; // CS
+        static final String CATOLOG_NUMBER = "cat_num"; // 246
+        static final String UNITS = "units";
+        static final String DESCRIPTION = "description";
+        static final String INSTRUCTIONS = "instructions";
+        static final String PREREQS_STRING = "prereqs_string"; // english description of prereqs
+        static final String ANTIREQS = "antireqs";
+        static final String PREREQS_LIST = "prereqs_list"; // list of prereqs in JSON string format
+        static final String FUTURE_COURSES_LIST = "future_courses_list";
+        static final String TERMS_OFFERED = "terms_offered";
+        static final String NOTES = "notes";
+        static final String IS_ONLINE = "is_online";
+        static final String URL = "url"; // link to UW website for official course info
+        static final String FAVOURITE = "favourite";
+
+        private Cols() {
+        }
+
+        static List<String> getColsList() {
+            return Arrays.asList(
+                    COURSE_CODE,
+                    TITLE, SUBJECT,
+                    CATOLOG_NUMBER,
+                    UNITS,
+                    DESCRIPTION,
+                    INSTRUCTIONS,
+                    PREREQS_STRING,
+                    ANTIREQS,
+                    PREREQS_LIST,
+                    FUTURE_COURSES_LIST,
+                    TERMS_OFFERED,
+                    NOTES,
+                    IS_ONLINE,
+                    URL,
+                    FAVOURITE);
         }
     }
 

@@ -12,11 +12,9 @@ import android.widget.TextView;
 import com.watshoulditake.waltermao.coursesapp.R;
 import com.watshoulditake.waltermao.coursesapp.loaders.GetCourseAboutLoader;
 import com.watshoulditake.waltermao.coursesapp.model.Course;
-import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
 
 public class CourseAboutFragment extends BaseCourseFragment {
 
-    private static final String LOG_TAG = CourseAboutFragment.class.getSimpleName();
     private static final int GET_COURSE_ABOUT_LOADER_ID = 532;
     private Course mCourse;
 
@@ -32,7 +30,7 @@ public class CourseAboutFragment extends BaseCourseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_course_about,container,false);
+        return inflater.inflate(R.layout.fragment_course_about, container, false);
     }
 
     @Override
@@ -51,8 +49,7 @@ public class CourseAboutFragment extends BaseCourseFragment {
         getLoaderManager().initLoader(GET_COURSE_ABOUT_LOADER_ID, getArguments(), new LoaderManager.LoaderCallbacks<Course>() {
             @Override
             public Loader<Course> onCreateLoader(int id, Bundle args) {
-                CourseSummary summary = args.getParcelable(COURSE_SUMMARY_ARG);
-                return new GetCourseAboutLoader(getContext(),summary.getCourseCode());
+                return new GetCourseAboutLoader(getContext(), getCourseCode());
             }
 
             @Override
@@ -68,6 +65,7 @@ public class CourseAboutFragment extends BaseCourseFragment {
         });
     }
 
+    @Override
     public void updateUI() {
         mDescription.setText(mCourse.getDescription());
         mPrereqs.setText(mCourse.getPrereqsString());

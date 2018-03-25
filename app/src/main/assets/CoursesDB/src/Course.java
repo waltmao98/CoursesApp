@@ -130,12 +130,12 @@ public class Course {
         return mInstructions != null ? mInstructions : new ArrayList<>();
     }
 
-    public String getInstructionsJSONString() {
-        return new Gson().toJson(mInstructions);
-    }
-
     public void setInstructions(List<String> instructions) {
         mInstructions = instructions;
+    }
+
+    public String getInstructionsJSONString() {
+        return new Gson().toJson(mInstructions);
     }
 
     public List<String> getPrereqs() {
@@ -170,24 +170,24 @@ public class Course {
         return mFutureCourses != null ? mFutureCourses : new ArrayList<>();
     }
 
-    public String getFutureCoursesJSONString() {
-        return new Gson().toJson(mFutureCourses);
-    }
-
     public void setFutureCourses(List<String> futureCourses) {
         mFutureCourses = futureCourses;
+    }
+
+    public String getFutureCoursesJSONString() {
+        return new Gson().toJson(mFutureCourses);
     }
 
     public List<String> getTermsOffered() {
         return mTermsOffered != null ? mTermsOffered : new ArrayList<>();
     }
 
-    public String getTermsOfferedJSONString() {
-        return new Gson().toJson(mTermsOffered);
-    }
-
     public void setTermsOffered(List<String> termsOffered) {
         mTermsOffered = termsOffered;
+    }
+
+    public String getTermsOfferedJSONString() {
+        return new Gson().toJson(mTermsOffered);
     }
 
     public String getNotes() {

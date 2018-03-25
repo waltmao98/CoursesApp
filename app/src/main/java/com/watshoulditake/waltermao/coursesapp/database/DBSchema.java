@@ -8,6 +8,9 @@ public class DBSchema {
     public static final String DB_NAME = "courses.db";
     public static final String TABLE_NAME = "COURSES";
 
+    private DBSchema() {
+    }
+
     public static class Cols {
         static final String COURSE_CODE = "course_code"; // CS246
         static final String TITLE = "title"; // Object Oriented Software Development
@@ -45,6 +48,4 @@ public class DBSchema {
                     FAVOURITE);
         }
     }
-
-    private DBSchema(){}
 }

@@ -14,7 +14,7 @@ public class FutureCoursesFragment extends Fragment {
     public static FutureCoursesFragment createFragment(String courseCode) {
         FutureCoursesFragment fragment = new FutureCoursesFragment();
         Bundle args = new Bundle();
-        args.putString(COURSE_CODE_ARG,courseCode);
+        args.putString(COURSE_CODE_ARG, courseCode);
         fragment.setArguments(args);
         return fragment;
     }
@@ -22,7 +22,7 @@ public class FutureCoursesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_future_courses,container,false);
+        return inflater.inflate(R.layout.fragment_future_courses, container, false);
     }
 
     @Override

@@ -4,12 +4,31 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class CourseSummary implements Parcelable {
+    public static final Creator<CourseSummary> CREATOR = new Creator<CourseSummary>() {
+        @Override
+        public CourseSummary createFromParcel(Parcel in) {
+            return new CourseSummary(in);
+        }
+
+        @Override
+        public CourseSummary[] newArray(int size) {
+            return new CourseSummary[size];
+        }
+    };
     private String mCourseCode;
     private String mTitle;
     private String mSubject;
     private String mCatalogNumber;
 
-    public CourseSummary() {}
+    public CourseSummary() {
+    }
+
+    protected CourseSummary(Parcel in) {
+        mCourseCode = in.readString();
+        mTitle = in.readString();
+        mSubject = in.readString();
+        mCatalogNumber = in.readString();
+    }
 
     public String getCourseCode() {
         return mCourseCode;
@@ -39,6 +58,8 @@ public class CourseSummary implements Parcelable {
         return mCatalogNumber;
     }
 
+    ///////////////////////// PARCELABLE //////////////////////////////
+
     public void setCatalogNumber(String catalogNumber) {
         mCatalogNumber = catalogNumber;
     }
@@ -46,27 +67,6 @@ public class CourseSummary implements Parcelable {
     @Override
     public boolean equals(Object other) {
         return other instanceof CourseSummary && mCourseCode.equals(((CourseSummary) other).getCourseCode());
-    }
-
-    ///////////////////////// PARCELABLE //////////////////////////////
-
-    public static final Creator<CourseSummary> CREATOR = new Creator<CourseSummary>() {
-        @Override
-        public CourseSummary createFromParcel(Parcel in) {
-            return new CourseSummary(in);
-        }
-
-        @Override
-        public CourseSummary[] newArray(int size) {
-            return new CourseSummary[size];
-        }
-    };
-
-    protected CourseSummary(Parcel in) {
-        mCourseCode = in.readString();
-        mTitle = in.readString();
-        mSubject = in.readString();
-        mCatalogNumber = in.readString();
     }
 
     @Override

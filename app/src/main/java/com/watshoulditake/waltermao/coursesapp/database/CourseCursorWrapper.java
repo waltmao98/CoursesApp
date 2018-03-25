@@ -21,51 +21,6 @@ public class CourseCursorWrapper extends CursorWrapper {
         super(cursor);
     }
 
-    /**
-     * Converts the single json array string item in this cursor to Java list.
-     * Requires: cursor contains a single item (single row and single column) that is a json array string
-     * @return Java list representation of the JSON array in this cursor
-     * @throws JSONException if the queried value is not a JSONArray string
-     * @throws RuntimeException if query returns more than 1 column
-     */
-    public List<CourseSummary> getCourseSummariesFromJSON() throws JSONException {
-        if(getColumnCount() > 1) {
-            throw new RuntimeException("Invalid format: cannot call getCourseSummariesFromJSON() on a cursor with more than 1 columns (there are " + getColumnCount() + " columns");
-        }
-
-        if(moveToNext()) {
-            String jsonCourseSummary = getString(0);
-            return CourseJSONUtils.JSONArrayToList(jsonCourseSummary);
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * @return list of course summaries for every course in COURSES table
-     */
-    public List<CourseSummary> getCourseSummaries() {
-        List<CourseSummary> courseSummaries = new ArrayList<>();
-        while(moveToNext()) {
-            courseSummaries.add(convertCursorToCourseSummary(this));
-        }
-        return courseSummaries;
-    }
-
-    /**
-     * @return course details of the single course in this cursor
-     * @throws RuntimeException if called on a cursor with > 1 row
-     */
-    public Course getCourseDetails() throws RuntimeException {
-        if(getCount() > 1) {
-            throw new RuntimeException("Cannot call CourseCursorWrapper.getCourseDetails() on a list of courses. Please use CourseCursorWrapper.getCourseSummaries() instead");
-        }
-        if(!moveToNext()) {
-            return null;
-        }
-        return convertCursorToCourse(this);
-    }
-
     private static CourseSummary convertCursorToCourseSummary(Cursor cursor) {
         CourseSummary summary = new CourseSummary();
         summary.setCourseCode(cursor.getString(cursor.getColumnIndex(DBSchema.Cols.COURSE_CODE)));
@@ -74,7 +29,7 @@ public class CourseCursorWrapper extends CursorWrapper {
         summary.setCatalogNumber(cursor.getString(cursor.getColumnIndex(DBSchema.Cols.CATOLOG_NUMBER)));
         return summary;
     }
-    
+
     private static Course convertCursorToCourse(Cursor cursor) {
         Course course = new Course();
         course.setCourseCode(cursor.getString(cursor.getColumnIndex(DBSchema.Cols.COURSE_CODE)));
@@ -104,7 +59,56 @@ public class CourseCursorWrapper extends CursorWrapper {
             e.printStackTrace();
         }
 
+        cursor.close();
         return course;
+    }
+
+    /**
+     * Converts the single json array string item in this cursor to Java list.
+     * Requires: cursor contains a single item (single row and single column) that is a json array string
+     *
+     * @return Java list representation of the JSON array in this cursor
+     * @throws JSONException    if the queried value is not a JSONArray string
+     * @throws RuntimeException if query returns more than 1 column
+     */
+    public List<CourseSummary> getCourseSummariesFromJSON() throws JSONException {
+        if (getColumnCount() > 1) {
+            throw new RuntimeException("Invalid format: cannot call getCourseSummariesFromJSON() on a cursor with more than 1 columns (there are " + getColumnCount() + " columns");
+        }
+
+        if (moveToNext()) {
+            String jsonCourseSummary = getString(0);
+            close();
+            return CourseJSONUtils.JSONArrayToList(jsonCourseSummary);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @return list of course summaries for every course in COURSES table
+     */
+    public List<CourseSummary> getCourseSummaries() {
+        List<CourseSummary> courseSummaries = new ArrayList<>();
+        while (moveToNext()) {
+            courseSummaries.add(convertCursorToCourseSummary(this));
+        }
+        close();
+        return courseSummaries;
+    }
+
+    /**
+     * @return course details of the single course in this cursor
+     * @throws RuntimeException if called on a cursor with > 1 row
+     */
+    public Course getCourseDetails() throws RuntimeException {
+        if (getCount() > 1) {
+            throw new RuntimeException("Cannot call CourseCursorWrapper.getCourseDetails() on a list of courses. Please use CourseCursorWrapper.getCourseSummaries() instead");
+        }
+        if (!moveToNext()) {
+            return null;
+        }
+        return convertCursorToCourse(this);
     }
 
 }

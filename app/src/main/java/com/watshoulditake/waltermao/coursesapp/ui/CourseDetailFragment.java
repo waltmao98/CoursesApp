@@ -20,36 +20,38 @@ import java.lang.ref.WeakReference;
 
 public class CourseDetailFragment extends BaseCourseFragment {
 
-    private static final String LOG_TAG = CourseDetailFragment.class.getSimpleName();
-
-    private CourseSummary mCourseSummary;
     private ViewPager mViewPager;
     private CoursePagerAdapter mPagerAdapter;
     private TabLayout mTabLayout;
+    private TextView mCourseCodeText;
+    private TextView mTitleText;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_course_detail,container,false);
+        return inflater.inflate(R.layout.fragment_course_detail, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mCourseSummary = getArguments().getParcelable(COURSE_SUMMARY_ARG);
-
-        TextView courseCodeText = view.findViewById(R.id.course_code);
-        TextView titleText = view.findViewById(R.id.course_title);
-
-        courseCodeText.setText(mCourseSummary.getCourseCode());
-        titleText.setText(mCourseSummary.getTitle());
+        mCourseCodeText = view.findViewById(R.id.course_code);
+        mTitleText = view.findViewById(R.id.course_title);
 
         mViewPager = view.findViewById(R.id.view_pager);
-        mPagerAdapter = new CoursePagerAdapter(mCourseSummary,getFragmentManager(),getContext());
+        mPagerAdapter = new CoursePagerAdapter(getCourseSummary(), getFragmentManager(), getContext());
         mViewPager.setAdapter(mPagerAdapter);
         mTabLayout = view.findViewById(R.id.sliding_tabs);
         mTabLayout.setupWithViewPager(mViewPager);
+
+        updateUI();
+    }
+
+    @Override
+    void updateUI() {
+        mCourseCodeText.setText(getCourseCode());
+        mTitleText.setText(getCourseSummary().getTitle());
     }
 
     private static class CoursePagerAdapter extends FragmentPagerAdapter {
@@ -69,7 +71,7 @@ public class CourseDetailFragment extends BaseCourseFragment {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return BaseCourseFragment.createFragment(new CourseAboutFragment(),mCourseSummary);
+                    return BaseCourseFragment.createFragment(new CourseAboutFragment(), mCourseSummary);
                 case 1:
                     return new PrereqsFragment();
                 case 2:

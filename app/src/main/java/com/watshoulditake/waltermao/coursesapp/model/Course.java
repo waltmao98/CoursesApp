@@ -124,16 +124,16 @@ public class Course implements BaseColumns {
         return mInstructions != null ? mInstructions : new ArrayList<String>();
     }
 
+    public void setInstructions(List<String> instructions) {
+        mInstructions = instructions;
+    }
+
     public String getInstructionsJSONString() {
         return new JSONArray(mInstructions).toString();
     }
 
     public String getInstructionsString() {
         return TextUtils.getCommaSeparatedList(mInstructions);
-    }
-
-    public void setInstructions(List<String> instructions) {
-        mInstructions = instructions;
     }
 
     public List<String> getPrereqs() {
@@ -168,16 +168,20 @@ public class Course implements BaseColumns {
         return mFutureCourses != null ? mFutureCourses : new ArrayList<String>();
     }
 
-    public String getFutureCoursesJSONString() {
-        return new JSONArray(mFutureCourses).toString();
-    }
-
     public void setFutureCourses(List<String> futureCourses) {
         mFutureCourses = futureCourses;
     }
 
+    public String getFutureCoursesJSONString() {
+        return new JSONArray(mFutureCourses).toString();
+    }
+
     public List<String> getTermsOffered() {
         return mTermsOffered != null ? mTermsOffered : new ArrayList<String>();
+    }
+
+    public void setTermsOffered(List<String> termsOffered) {
+        mTermsOffered = termsOffered;
     }
 
     public String getTermsOfferedString() {
@@ -186,10 +190,6 @@ public class Course implements BaseColumns {
 
     public String getTermsOfferedJSONString() {
         return new JSONArray(mTermsOffered).toString();
-    }
-
-    public void setTermsOffered(List<String> termsOffered) {
-        mTermsOffered = termsOffered;
     }
 
     public String getNotes() {

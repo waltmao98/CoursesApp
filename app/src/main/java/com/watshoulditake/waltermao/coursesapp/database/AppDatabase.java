@@ -19,7 +19,7 @@ public class AppDatabase extends SQLiteAssetHelper {
                                             String[] whereArgs,
                                             String groupBy,
                                             String having,
-                                            String orderBy){
+                                            String orderBy) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query(DBSchema.TABLE_NAME,
                 colNames,
@@ -30,10 +30,6 @@ public class AppDatabase extends SQLiteAssetHelper {
                 orderBy);
 
         return new CourseCursorWrapper(cursor);
-    }
-
-    public void close() {
-        close();
     }
 
 }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="vertical">
@@ -8,17 +7,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/double_space"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/double_space">
 
         <!-- Description -->
-        <LinearLayout
-            style="@style/CourseDetailLinearLayout">
+        <LinearLayout style="@style/CourseDetailLinearLayout">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/description"/>
+                android:text="@string/description" />
 
             <TextView
                 android:id="@+id/description"
@@ -28,29 +26,27 @@
         </LinearLayout>
 
         <!-- Prerequisites -->
-        <LinearLayout
-            style="@style/CourseDetailLinearLayout">
+        <LinearLayout style="@style/CourseDetailLinearLayout">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/prerequisites"/>
+                android:text="@string/prerequisites" />
 
             <TextView
                 android:id="@+id/prereqs"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
         <!-- Antirequisites -->
-        <LinearLayout
-            style="@style/CourseDetailLinearLayout">
+        <LinearLayout style="@style/CourseDetailLinearLayout">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/antirequisites"/>
+                android:text="@string/antirequisites" />
 
             <TextView
                 android:id="@+id/antirequisites"
@@ -71,8 +67,8 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_marginBottom="@dimen/space"
+                android:orientation="vertical"
                 grid:layout_columnWeight="2.5"
                 grid:layout_gravity="fill_horizontal">
 
@@ -92,8 +88,8 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_marginBottom="@dimen/space"
+                android:orientation="vertical"
                 grid:layout_columnWeight="2.5"
                 grid:layout_gravity="fill_horizontal">
 
@@ -152,19 +148,18 @@
         </android.support.v7.widget.GridLayout>
 
         <!-- Web URL -->
-        <LinearLayout
-            style="@style/CourseDetailLinearLayout">
+        <LinearLayout style="@style/CourseDetailLinearLayout">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/web_url"/>
+                android:text="@string/web_url" />
 
             <TextView
                 android:id="@+id/web_url"
-                android:autoLink="web"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:autoLink="web" />
 
         </LinearLayout>
 

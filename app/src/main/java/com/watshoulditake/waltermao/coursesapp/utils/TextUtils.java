@@ -5,15 +5,15 @@ import java.util.List;
 public class TextUtils {
 
     public static <T> String getCommaSeparatedList(List<T> list) {
-        if(list == null) {
+        if (list == null) {
             return "";
         }
-        String result = "";
-        for(int i = 0; i < list.size()-1; ++i) {
-            result += list.get(i) + ", ";
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < list.size() - 1; ++i) {
+            result.append(list.get(i)).append(", ");
         }
-        result += list.get(list.size()-1);
-        return result;
+        result.append(list.get(list.size() - 1));
+        return result.toString();
     }
 
 }

@@ -28,7 +28,7 @@ public class GetCoursesLoader extends BaseCourseLoader<List<CourseSummary>> {
 
     @Override
     public List<CourseSummary> loadInBackground() {
-        if(mSubject == null) {
+        if (mSubject == null) {
             return CoursesDao.getInstance(getContext()).getAllCourses();
         } else {
             return CoursesDao.getInstance(getContext()).querySubject(mSubject);
