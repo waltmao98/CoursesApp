@@ -38,7 +38,7 @@ public abstract class BaseCourseListFragment extends BaseCourseFragment {
 
     @Override
     void updateData() {
-        getLoaderManager().initLoader(COURSE_LIST_LOADER, null, new CourseListLoaderCallbacks());
+        getLoaderManager().restartLoader(COURSE_LIST_LOADER, null, new CourseListLoaderCallbacks());
     }
 
     @Override
