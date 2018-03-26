@@ -18,7 +18,9 @@ import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
 
 import java.lang.ref.WeakReference;
 
-public class CourseDetailFragment extends BaseCourseFragment {
+public class CourseDetailPagerFragment extends BaseCourseFragment implements ChangeTabEventListener {
+
+    public static int ABOUT_PAGE_POSITION = 0;
 
     private ViewPager mViewPager;
     private CoursePagerAdapter mPagerAdapter;
@@ -56,7 +58,15 @@ public class CourseDetailFragment extends BaseCourseFragment {
         mTabLayout.setupWithViewPager(mViewPager);
     }
 
-    private static class CoursePagerAdapter extends FragmentPagerAdapter {
+    @Override
+    public void changeToPage(int page) {
+        if (page >= 0 && page < mPagerAdapter.getCount()) {
+            mViewPager.setCurrentItem(page);
+        }
+    }
+
+
+    private class CoursePagerAdapter extends FragmentPagerAdapter {
 
         private static final int NUM_ITEMS = 4;
 
@@ -75,9 +85,13 @@ public class CourseDetailFragment extends BaseCourseFragment {
                 case 0:
                     return BaseCourseFragment.createFragment(new CourseAboutFragment(), mCourseSummary);
                 case 1:
-                    return BaseCourseFragment.createFragment(new PrereqsFragment(), mCourseSummary);
+                    BaseCourseFragment prereqsFragment = new PrereqsFragment();
+                    prereqsFragment.setChangeTabEventListener(CourseDetailPagerFragment.this);
+                    return BaseCourseFragment.createFragment(prereqsFragment, mCourseSummary);
                 case 2:
-                    return BaseCourseFragment.createFragment(new FutureCoursesFragment(), mCourseSummary);
+                    BaseCourseFragment futureCoursesFragment = new FutureCoursesFragment();
+                    futureCoursesFragment.setChangeTabEventListener(CourseDetailPagerFragment.this);
+                    return BaseCourseFragment.createFragment(futureCoursesFragment, mCourseSummary);
                 case 3:
                     return new CourseScheduleFragment();
                 default:

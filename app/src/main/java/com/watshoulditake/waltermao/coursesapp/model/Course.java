@@ -104,8 +104,8 @@ public class Course implements BaseColumns {
         mCatalogNumber = catalogNumber;
     }
 
-    public double getUnits() {
-        return mUnits != null ? mUnits : 0.5;
+    public Double getUnits() {
+        return mUnits;
     }
 
     public void setUnits(double units) {
@@ -200,8 +200,8 @@ public class Course implements BaseColumns {
         mNotes = notes;
     }
 
-    public boolean isOnline() {
-        return mIsOnline != null ? mIsOnline : false;
+    public Boolean isOnline() {
+        return mIsOnline;
     }
 
     public void setIsOnline(boolean online) {

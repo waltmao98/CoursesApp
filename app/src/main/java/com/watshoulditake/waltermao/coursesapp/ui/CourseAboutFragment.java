@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.watshoulditake.waltermao.coursesapp.R;
 import com.watshoulditake.waltermao.coursesapp.loaders.CourseAboutLoader;
 import com.watshoulditake.waltermao.coursesapp.model.Course;
+import com.watshoulditake.waltermao.coursesapp.utils.TextUtils;
 
 public class CourseAboutFragment extends BaseCourseFragment {
 
@@ -36,19 +37,19 @@ public class CourseAboutFragment extends BaseCourseFragment {
 
     @Override
     void updateData() {
-        getLoaderManager().initLoader(GET_COURSE_ABOUT_LOADER_ID, null, new CourseAboutLoaderCallbacks());
+        getLoaderManager().restartLoader(GET_COURSE_ABOUT_LOADER_ID, null, new CourseAboutLoaderCallbacks());
     }
 
     @Override
     public void updateUI() {
-        mDescription.setText(mCourse.getDescription());
-        mPrereqs.setText(mCourse.getPrereqsString());
-        mAntiReqs.setText(mCourse.getAntiRequisites());
-        mTermsOffered.setText(mCourse.getTermsOfferedString());
-        mUnits.setText(String.valueOf(mCourse.getUnits()));
-        mIsOnline.setText(mCourse.isOnline() ? "Yes" : "No");
-        mInstructions.setText(mCourse.getInstructionsString());
-        mWebUrl.setText(mCourse.getURL());
+        mDescription.setText(TextUtils.isNullorEmpty(mCourse.getDescription()) ? "–" : mCourse.getDescription());
+        mPrereqs.setText(TextUtils.isNullorEmpty(mCourse.getPrereqsString()) ? "–" : mCourse.getPrereqsString());
+        mAntiReqs.setText(TextUtils.isNullorEmpty(mCourse.getAntiRequisites()) ? "–" : mCourse.getAntiRequisites());
+        mTermsOffered.setText(TextUtils.isNullorEmpty(mCourse.getTermsOfferedString()) ? "–" : mCourse.getTermsOfferedString());
+        mUnits.setText(mCourse.getUnits() == null ? "–" : String.valueOf(mCourse.getUnits()));
+        mIsOnline.setText(mCourse.isOnline() != null ? (mCourse.isOnline() ? "Yes" : "No") : "–");
+        mInstructions.setText(TextUtils.isNullorEmpty(mCourse.getInstructionsString()) ? "–" : mCourse.getInstructionsString());
+        mWebUrl.setText(TextUtils.isNullorEmpty(mCourse.getURL()) ? "–" : mCourse.getURL());
     }
 
     @Override

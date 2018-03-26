@@ -31,7 +31,7 @@ public class BaseActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         if (fm.findFragmentById(R.id.fragment_container) == null) {
             fm.beginTransaction()
-                    .add(R.id.fragment_container, CourseDetailFragment.createFragment(new CourseDetailFragment(), summaries.get(5)))
+                    .add(R.id.fragment_container, CourseDetailPagerFragment.createFragment(new CourseDetailPagerFragment(), summaries.get(5)))
                     .commit();
         }
     }

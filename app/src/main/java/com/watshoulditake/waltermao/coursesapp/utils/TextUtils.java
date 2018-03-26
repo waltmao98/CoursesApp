@@ -16,4 +16,8 @@ public class TextUtils {
         return result.toString();
     }
 
+    public static boolean isNullorEmpty(String str) {
+        return str == null || str.isEmpty();
+    }
+
 }

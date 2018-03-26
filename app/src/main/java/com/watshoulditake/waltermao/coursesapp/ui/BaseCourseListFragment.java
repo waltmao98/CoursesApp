@@ -75,6 +75,10 @@ public abstract class BaseCourseListFragment extends BaseCourseFragment {
         intent.setAction(BaseCourseFragment.COURSE_CHANGED_ACTION);
         intent.putExtra(COURSE_SUMMARY_ARG, courseSummary);
         getContext().sendBroadcast(intent);
+
+        if (mChangeTabEventListener != null) {
+            mChangeTabEventListener.changeToPage(CourseDetailPagerFragment.ABOUT_PAGE_POSITION);
+        }
     }
 
     abstract String getListDescription();
@@ -83,7 +87,7 @@ public abstract class BaseCourseListFragment extends BaseCourseFragment {
 
     /////////////////////////////// INNER CLASSES //////////////////////////////
 
-    private class CourseSummaryHolder extends RecyclerView.ViewHolder {
+    private class CourseSummaryHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private CourseSummary mCourseSummary;
         private TextView mCourseCodeText;
@@ -93,6 +97,7 @@ public abstract class BaseCourseListFragment extends BaseCourseFragment {
             super(inflater.inflate(R.layout.list_item_course_summary, parent, false));
             mCourseCodeText = itemView.findViewById(R.id.course_code);
             mTitleText = itemView.findViewById(R.id.course_title);
+            itemView.setOnClickListener(this);
         }
 
         public void bind(CourseSummary courseSummary) {
@@ -101,6 +106,10 @@ public abstract class BaseCourseListFragment extends BaseCourseFragment {
             mTitleText.setText(courseSummary.getTitle());
         }
 
+        @Override
+        public void onClick(View view) {
+            sendCourseChangedBroadcast(mCourseSummary);
+        }
     }
 
     private class CourseSummariesAdapter extends RecyclerView.Adapter<CourseSummaryHolder> {

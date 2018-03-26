@@ -26,6 +26,7 @@ public abstract class BaseCourseFragment extends Fragment {
 
     private CourseChangedReceiver mReceiver;
     private CourseSummary mCourseSummary;
+    ChangeTabEventListener mChangeTabEventListener;
 
     /**
      * @param fragment      the instance of subclass of BaseCourseFragment to be created
@@ -67,6 +68,10 @@ public abstract class BaseCourseFragment extends Fragment {
 
     String getCourseCode() {
         return mCourseSummary.getCourseCode();
+    }
+
+    void setChangeTabEventListener(ChangeTabEventListener listener) {
+        mChangeTabEventListener = listener;
     }
 
     @CallSuper

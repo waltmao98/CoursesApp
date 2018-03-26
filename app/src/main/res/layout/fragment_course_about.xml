@@ -11,7 +11,9 @@
         android:padding="@dimen/double_space">
 
         <!-- Description -->
-        <LinearLayout style="@style/CourseDetailLinearLayout">
+        <LinearLayout
+            style="@style/CourseDetailLinearLayout"
+            android:layout_width="match_parent">
 
             <TextView
                 android:layout_width="match_parent"
