@@ -10,17 +10,25 @@ import java.util.List;
  * Utility methods for handling conversions between Java and JSON
  */
 public class CourseJSONUtils {
+
+    private static final String LOG_TAG = CourseJSONUtils.class.getSimpleName();
+
     /**
      * @param jsonArrayString json array string representation of data
      * @return ArrayList representation of {@code jsonArrayString} data
      * @throws JSONException
      */
     public static <T> List<T> JSONArrayToList(String jsonArrayString) throws JSONException {
-        JSONArray jsonArray = new JSONArray(jsonArrayString);
-        List<T> list = new ArrayList<>();
-        for (int i = 0; i < jsonArray.length(); ++i) {
-            list.add((T) jsonArray.get(i));
+        try {
+            JSONArray jsonArray = new JSONArray(jsonArrayString);
+            List<T> list = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); ++i) {
+                list.add((T) jsonArray.get(i));
+            }
+            return list;
+        } catch (JSONException e) {
+            // json string is [] (empty list)
+            return new ArrayList<>();
         }
-        return list;
     }
 }

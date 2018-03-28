@@ -18,6 +18,7 @@ import com.watshoulditake.waltermao.coursesapp.R;
 import com.watshoulditake.waltermao.coursesapp.loaders.CourseListLoader;
 import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -43,7 +44,8 @@ public abstract class BaseCourseListFragment extends BaseCourseFragment {
 
     @Override
     void updateUI() {
-        if (mCourseSummaries.size() != 0) {
+        boolean showViews = mCourseSummaries != null && mCourseSummaries.size() != 0;
+        if (showViews) {
             mDescriptionText.setText(getListDescription());
             if (mAdapter == null || mRecyclerView.getAdapter() == null) {
                 mAdapter = new CourseSummariesAdapter(mCourseSummaries);
@@ -52,11 +54,8 @@ public abstract class BaseCourseListFragment extends BaseCourseFragment {
                 mAdapter.setData(mCourseSummaries);
                 mAdapter.notifyDataSetChanged();
             }
-        } else {
-            mDescriptionText.setVisibility(View.GONE);
-            mRecyclerView.setVisibility(View.GONE);
-            getView().findViewById(R.id.empty_text).setVisibility(View.VISIBLE);
         }
+        setViewsVisibility(showViews);
     }
 
     @Override
@@ -66,6 +65,7 @@ public abstract class BaseCourseListFragment extends BaseCourseFragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
                 ((LinearLayoutManager) mRecyclerView.getLayoutManager()).getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
+        mRecyclerView.setAdapter(new CourseSummariesAdapter(new ArrayList<CourseSummary>()));
 
         mDescriptionText = view.findViewById(R.id.list_description);
     }
@@ -75,10 +75,12 @@ public abstract class BaseCourseListFragment extends BaseCourseFragment {
         intent.setAction(BaseCourseFragment.COURSE_CHANGED_ACTION);
         intent.putExtra(COURSE_SUMMARY_ARG, courseSummary);
         getContext().sendBroadcast(intent);
+    }
 
-        if (mChangeTabEventListener != null) {
-            mChangeTabEventListener.changeToPage(CourseDetailPagerFragment.ABOUT_PAGE_POSITION);
-        }
+    void setViewsVisibility(boolean shown) {
+        mRecyclerView.setVisibility(shown ? View.VISIBLE : View.GONE);
+        mDescriptionText.setVisibility(shown ? View.VISIBLE : View.GONE);
+        getView().findViewById(R.id.empty_text).setVisibility(shown ? View.GONE : View.VISIBLE);
     }
 
     abstract String getListDescription();
@@ -109,6 +111,9 @@ public abstract class BaseCourseListFragment extends BaseCourseFragment {
         @Override
         public void onClick(View view) {
             sendCourseChangedBroadcast(mCourseSummary);
+            if (mChangeTabEventListener != null) {
+                mChangeTabEventListener.changeToPage(CourseDetailPagerFragment.ABOUT_PAGE_POSITION);
+            }
         }
     }
 
@@ -160,5 +165,4 @@ public abstract class BaseCourseListFragment extends BaseCourseFragment {
 
         }
     }
-
 }

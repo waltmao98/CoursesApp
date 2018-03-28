@@ -14,6 +14,8 @@ import java.util.List;
 
 public class PrereqsFragment extends BaseCourseListFragment {
 
+    private static final String LOG_TAG = PrereqsFragment.class.getSimpleName();
+
     @Override
     String getListDescription() {
         return getString(R.string.prereqs_list_description, getCourseCode());

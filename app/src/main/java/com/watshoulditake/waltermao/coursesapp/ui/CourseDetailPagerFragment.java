@@ -17,7 +17,6 @@ import com.watshoulditake.waltermao.coursesapp.R;
 import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
 
 import java.lang.ref.WeakReference;
-import java.util.Stack;
 
 public class CourseDetailPagerFragment extends BaseCourseFragment implements ChangeTabEventListener {
 
@@ -28,7 +27,6 @@ public class CourseDetailPagerFragment extends BaseCourseFragment implements Cha
     private TabLayout mTabLayout;
     private TextView mCourseCodeText;
     private TextView mTitleText;
-    private Stack<CourseSummary> mCoursesStack;
 
     @Nullable
     @Override
@@ -39,8 +37,6 @@ public class CourseDetailPagerFragment extends BaseCourseFragment implements Cha
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mCoursesStack = new Stack<>();
-        mCoursesStack.add(getCourseSummary());
     }
 
     @Override
@@ -77,7 +73,6 @@ public class CourseDetailPagerFragment extends BaseCourseFragment implements Cha
     @Override
     void receiveCourseChangedBroadcast(CourseSummary summary) {
         super.receiveCourseChangedBroadcast(summary);
-        mCoursesStack.add(summary);
     }
 
     private class CoursePagerAdapter extends FragmentPagerAdapter {
