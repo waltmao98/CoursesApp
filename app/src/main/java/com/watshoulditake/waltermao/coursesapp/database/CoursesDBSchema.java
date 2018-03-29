@@ -3,12 +3,12 @@ package com.watshoulditake.waltermao.coursesapp.database;
 import java.util.Arrays;
 import java.util.List;
 
-public class DBSchema {
+public class CoursesDBSchema {
 
     public static final String DB_NAME = "courses.db";
     public static final String TABLE_NAME = "COURSES";
 
-    private DBSchema() {
+    private CoursesDBSchema() {
     }
 
     public static class Cols {
@@ -49,10 +49,10 @@ public class DBSchema {
                         FAVOURITE);
 
         static final String[] COURSE_SUMMARY_COLS = new String[]{
-                DBSchema.Cols.COURSE_CODE,
-                DBSchema.Cols.TITLE,
-                DBSchema.Cols.SUBJECT,
-                DBSchema.Cols.CATOLOG_NUMBER
+                CoursesDBSchema.Cols.COURSE_CODE,
+                CoursesDBSchema.Cols.TITLE,
+                CoursesDBSchema.Cols.SUBJECT,
+                CoursesDBSchema.Cols.CATOLOG_NUMBER
         };
     }
 }

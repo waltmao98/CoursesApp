@@ -85,33 +85,33 @@ public class CourseCursorWrapper extends CursorWrapper {
 
     private static CourseSummary convertCursorToCourseSummary(Cursor cursor) {
         CourseSummary summary = new CourseSummary();
-        summary.setCourseCode(cursor.getString(cursor.getColumnIndex(DBSchema.Cols.COURSE_CODE)));
-        summary.setSubject(cursor.getString(cursor.getColumnIndex(DBSchema.Cols.SUBJECT)));
-        summary.setTitle(cursor.getString(cursor.getColumnIndex(DBSchema.Cols.TITLE)));
-        summary.setCatalogNumber(cursor.getString(cursor.getColumnIndex(DBSchema.Cols.CATOLOG_NUMBER)));
+        summary.setCourseCode(cursor.getString(cursor.getColumnIndex(CoursesDBSchema.Cols.COURSE_CODE)));
+        summary.setSubject(cursor.getString(cursor.getColumnIndex(CoursesDBSchema.Cols.SUBJECT)));
+        summary.setTitle(cursor.getString(cursor.getColumnIndex(CoursesDBSchema.Cols.TITLE)));
+        summary.setCatalogNumber(cursor.getString(cursor.getColumnIndex(CoursesDBSchema.Cols.CATOLOG_NUMBER)));
         return summary;
     }
 
     private static Course convertCursorToCourse(Cursor cursor) {
         Course course = new Course();
-        course.setCourseCode(cursor.getString(cursor.getColumnIndex(DBSchema.Cols.COURSE_CODE)));
-        course.setTitle(cursor.getString(cursor.getColumnIndex(DBSchema.Cols.TITLE)));
-        course.setSubject(cursor.getString(cursor.getColumnIndex(DBSchema.Cols.SUBJECT)));
-        course.setCatalogNumber(cursor.getString(cursor.getColumnIndex(DBSchema.Cols.CATOLOG_NUMBER)));
-        course.setUnits(cursor.getDouble(cursor.getColumnIndex(DBSchema.Cols.UNITS)));
-        course.setDescription(cursor.getString(cursor.getColumnIndex(DBSchema.Cols.DESCRIPTION)));
-        course.setPrereqsString(cursor.getString(cursor.getColumnIndex(DBSchema.Cols.PREREQS_STRING)));
-        course.setAntiRequisites(cursor.getString(cursor.getColumnIndex(DBSchema.Cols.ANTIREQS)));
-        course.setNotes(cursor.getString(cursor.getColumnIndex(DBSchema.Cols.NOTES)));
-        course.setIsOnline(cursor.getInt(cursor.getColumnIndex(DBSchema.Cols.IS_ONLINE)) == 1);
-        course.setURL(cursor.getString(cursor.getColumnIndex(DBSchema.Cols.URL)));
-        course.setIsFavourite(cursor.getInt(cursor.getColumnIndex(DBSchema.Cols.FAVOURITE)) == 1);
+        course.setCourseCode(cursor.getString(cursor.getColumnIndex(CoursesDBSchema.Cols.COURSE_CODE)));
+        course.setTitle(cursor.getString(cursor.getColumnIndex(CoursesDBSchema.Cols.TITLE)));
+        course.setSubject(cursor.getString(cursor.getColumnIndex(CoursesDBSchema.Cols.SUBJECT)));
+        course.setCatalogNumber(cursor.getString(cursor.getColumnIndex(CoursesDBSchema.Cols.CATOLOG_NUMBER)));
+        course.setUnits(cursor.getDouble(cursor.getColumnIndex(CoursesDBSchema.Cols.UNITS)));
+        course.setDescription(cursor.getString(cursor.getColumnIndex(CoursesDBSchema.Cols.DESCRIPTION)));
+        course.setPrereqsString(cursor.getString(cursor.getColumnIndex(CoursesDBSchema.Cols.PREREQS_STRING)));
+        course.setAntiRequisites(cursor.getString(cursor.getColumnIndex(CoursesDBSchema.Cols.ANTIREQS)));
+        course.setNotes(cursor.getString(cursor.getColumnIndex(CoursesDBSchema.Cols.NOTES)));
+        course.setIsOnline(cursor.getInt(cursor.getColumnIndex(CoursesDBSchema.Cols.IS_ONLINE)) == 1);
+        course.setURL(cursor.getString(cursor.getColumnIndex(CoursesDBSchema.Cols.URL)));
+        course.setIsFavourite(cursor.getInt(cursor.getColumnIndex(CoursesDBSchema.Cols.FAVOURITE)) == 1);
 
         try {
-            List<String> instructions = CourseJSONUtils.JSONArrayToList(cursor.getString(cursor.getColumnIndex(DBSchema.Cols.INSTRUCTIONS)));
-            List<String> prereqsList = CourseJSONUtils.JSONArrayToList(cursor.getString(cursor.getColumnIndex(DBSchema.Cols.PREREQS_LIST)));
-            List<String> futureCoursesList = CourseJSONUtils.JSONArrayToList(cursor.getString(cursor.getColumnIndex(DBSchema.Cols.FUTURE_COURSES_LIST)));
-            List<String> termsOffered = CourseJSONUtils.JSONArrayToList(cursor.getString(cursor.getColumnIndex(DBSchema.Cols.TERMS_OFFERED)));
+            List<String> instructions = CourseJSONUtils.JSONArrayToList(cursor.getString(cursor.getColumnIndex(CoursesDBSchema.Cols.INSTRUCTIONS)));
+            List<String> prereqsList = CourseJSONUtils.JSONArrayToList(cursor.getString(cursor.getColumnIndex(CoursesDBSchema.Cols.PREREQS_LIST)));
+            List<String> futureCoursesList = CourseJSONUtils.JSONArrayToList(cursor.getString(cursor.getColumnIndex(CoursesDBSchema.Cols.FUTURE_COURSES_LIST)));
+            List<String> termsOffered = CourseJSONUtils.JSONArrayToList(cursor.getString(cursor.getColumnIndex(CoursesDBSchema.Cols.TERMS_OFFERED)));
 
             course.setInstructions(instructions);
             course.setPrereqsList(prereqsList);

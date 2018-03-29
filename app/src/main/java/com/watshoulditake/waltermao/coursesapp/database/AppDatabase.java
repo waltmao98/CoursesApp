@@ -11,7 +11,7 @@ public class AppDatabase extends SQLiteAssetHelper {
     public static final int DB_VERSION = 1;
 
     public AppDatabase(Context context) {
-        super(context, DBSchema.DB_NAME, null, DB_VERSION);
+        super(context, CoursesDBSchema.DB_NAME, null, DB_VERSION);
     }
 
     public CourseCursorWrapper queryCourses(String[] colNames,
@@ -21,7 +21,7 @@ public class AppDatabase extends SQLiteAssetHelper {
                                             String having,
                                             String orderBy) {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.query(DBSchema.TABLE_NAME,
+        Cursor cursor = db.query(CoursesDBSchema.TABLE_NAME,
                 colNames,
                 whereClause,
                 whereArgs,

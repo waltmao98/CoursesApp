@@ -1,6 +1,8 @@
 package com.watshoulditake.waltermao.coursesapp.database;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.WorkerThread;
 
 import com.watshoulditake.waltermao.coursesapp.model.Course;
@@ -9,7 +11,9 @@ import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Data access object for database
@@ -32,18 +36,18 @@ public class CoursesDao {
 
     @WorkerThread
     public List<CourseSummary> getPrerequitesList(String courseCode) throws JSONException {
-        return getJSONCourseSummaryList(courseCode, DBSchema.Cols.PREREQS_LIST);
+        return getJSONCourseSummaryList(courseCode, CoursesDBSchema.Cols.PREREQS_LIST);
     }
 
     @WorkerThread
     public List<CourseSummary> getFutureCourses(String courseCode) throws JSONException {
-        return getJSONCourseSummaryList(courseCode, DBSchema.Cols.FUTURE_COURSES_LIST);
+        return getJSONCourseSummaryList(courseCode, CoursesDBSchema.Cols.FUTURE_COURSES_LIST);
     }
 
     @WorkerThread
     public List<CourseSummary> querySubject(String subject) {
         CourseCursorWrapper cursorWrapper = mDbHelper.queryCourses(null,
-                DBSchema.Cols.SUBJECT + "= ?",
+                CoursesDBSchema.Cols.SUBJECT + "= ?",
                 new String[]{subject},
                 null, null, null);
         return cursorWrapper.getCourseSummaries();
@@ -52,7 +56,7 @@ public class CoursesDao {
     @WorkerThread
     public Course getCourseDetail(String courseCode) {
         CourseCursorWrapper cursorWrapper = mDbHelper.queryCourses(null,
-                DBSchema.Cols.COURSE_CODE + "= ?",
+                CoursesDBSchema.Cols.COURSE_CODE + "= ?",
                 new String[]{courseCode},
                 null, null, null);
         return cursorWrapper.getCourseDetails();
@@ -61,8 +65,8 @@ public class CoursesDao {
     @WorkerThread
     public CourseSummary getSingleCourseSummary(String courseCode) {
         CourseCursorWrapper cursorWrapper = mDbHelper.queryCourses(
-                DBSchema.Cols.COURSE_SUMMARY_COLS,
-                DBSchema.Cols.COURSE_CODE + "=?",
+                CoursesDBSchema.Cols.COURSE_SUMMARY_COLS,
+                CoursesDBSchema.Cols.COURSE_CODE + "=?",
                 new String[]{courseCode},
                 null,
                 null,
@@ -75,9 +79,9 @@ public class CoursesDao {
     public List<CourseSummary> querySearchTerm(String searchTerm) {
         String sqlSearchTerm = "%" + searchTerm + "%";
         CourseCursorWrapper cursorWrapper = mDbHelper.queryCourses(null,
-                DBSchema.Cols.COURSE_CODE + " LIKE ? COLLATE NOCASE" +
-                        " OR " + DBSchema.Cols.TITLE + " LIKE ? COLLATE NOCASE" +
-                        " OR " + DBSchema.Cols.DESCRIPTION + " LIKE ? COLLATE NOCASE",
+                CoursesDBSchema.Cols.COURSE_CODE + " LIKE ? COLLATE NOCASE" +
+                        " OR " + CoursesDBSchema.Cols.TITLE + " LIKE ? COLLATE NOCASE" +
+                        " OR " + CoursesDBSchema.Cols.DESCRIPTION + " LIKE ? COLLATE NOCASE",
                 new String[]{sqlSearchTerm, sqlSearchTerm, sqlSearchTerm},
                 null, null, null);
         return cursorWrapper.getCourseSummaries();
@@ -86,7 +90,7 @@ public class CoursesDao {
     @WorkerThread
     public List<CourseSummary> getAllCourses() {
         CourseCursorWrapper cursorWrapper = mDbHelper.queryCourses(
-                null, null, null, DBSchema.Cols.SUBJECT, null, null);
+                null, null, null, CoursesDBSchema.Cols.SUBJECT, null, null);
         return cursorWrapper.getCourseSummaries();
     }
 
@@ -100,7 +104,7 @@ public class CoursesDao {
     private List<CourseSummary> getJSONCourseSummaryList(String courseCode, String column) throws JSONException {
         CourseCursorWrapper cursorWrapper = mDbHelper.queryCourses(
                 new String[]{column},
-                DBSchema.Cols.COURSE_CODE + "=?",
+                CoursesDBSchema.Cols.COURSE_CODE + "=?",
                 new String[]{courseCode},
                 null,
                 null,
@@ -112,6 +116,26 @@ public class CoursesDao {
             prereqs.add(getSingleCourseSummary(prereqCourseCode));
         }
         return prereqs;
+    }
+
+    /**
+     * @return map of subject code to subject full name
+     */
+    @WorkerThread
+    public Map<String, String> getSubjectMapping() {
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        Cursor cursor = db.query(SubjectDBSchema.TABLE_NAME,
+                new String[]{SubjectDBSchema.Cols.SUBJECT_CODE, SubjectDBSchema.Cols.SUBJECT_NAME},
+                null, null, null, null,
+                SubjectDBSchema.Cols.SUBJECT_CODE + " DESC");
+        Map<String, String> subjectsMap = new LinkedHashMap<>();
+        while (cursor.moveToNext()) {
+            String subjectCode = cursor.getString(cursor.getColumnIndex(SubjectDBSchema.Cols.SUBJECT_CODE));
+            String subjectName = cursor.getString(cursor.getColumnIndex(SubjectDBSchema.Cols.SUBJECT_NAME));
+            subjectsMap.put(subjectCode, subjectName);
+        }
+        cursor.close();
+        return subjectsMap;
     }
 
 }

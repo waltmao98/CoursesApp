@@ -4,9 +4,10 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
+import com.arlib.floatingsearchview.FloatingSearchView;
 import com.watshoulditake.waltermao.coursesapp.R;
-import com.watshoulditake.waltermao.coursesapp.database.CoursesDao;
 import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
 
 import java.util.List;
@@ -17,6 +18,8 @@ public class BaseActivity extends AppCompatActivity {
 
     private List<CourseSummary> summaries; // testing
 
+    private FloatingSearchView mSearchView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,17 +28,12 @@ public class BaseActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // testing
-        summaries = CoursesDao.getInstance(this).querySubject("CS");
-        startFragment();
+        mSearchView = findViewById(R.id.floating_search_view);
 
-    }
-
-    private void startFragment() {
         FragmentManager fm = getSupportFragmentManager();
         if (fm.findFragmentById(R.id.fragment_container) == null) {
             fm.beginTransaction()
-                    .add(R.id.fragment_container, CourseDetailPagerFragment.createFragment(new CourseDetailPagerFragment(), summaries.get(5)))
+                    .add(R.id.fragment_container, new HomeFragment())
                     .commit();
         }
     }

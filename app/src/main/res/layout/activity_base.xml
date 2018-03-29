@@ -14,13 +14,28 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <LinearLayout
-        android:id="@+id/fragment_container"
+    <com.arlib.floatingsearchview.FloatingSearchView
+        android:id="@+id/floating_search_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        app:floatingSearch_close_search_on_keyboard_dismiss="true"
+        app:floatingSearch_leftActionMode="showHamburger"
+        app:floatingSearch_searchBarMarginLeft="@dimen/space"
+        app:floatingSearch_searchBarMarginRight="@dimen/space"
+        app:floatingSearch_searchBarMarginTop="@dimen/space"
+        app:floatingSearch_searchHint="Search..."
+        app:floatingSearch_showSearchKey="false"
+        app:floatingSearch_suggestionsListAnimDuration="250">
+        <!-- app:floatingSearch_menu="@menu/menu_main" -->
 
-    </LinearLayout>
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/search_view_offset">
+        </FrameLayout>
+
+    </com.arlib.floatingsearchview.FloatingSearchView>
 
 </LinearLayout>
 
