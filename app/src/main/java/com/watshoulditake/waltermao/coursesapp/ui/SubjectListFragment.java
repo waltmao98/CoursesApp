@@ -8,6 +8,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +24,9 @@ import com.watshoulditake.waltermao.coursesapp.model.SubjectMapping;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubjectListFragment extends android.support.v4.app.Fragment {
+public class SubjectListFragment extends BaseFragment {
 
+    private static final String LOG_TAG = SubjectListFragment.class.getSimpleName();
     private static final String SUBJECT_MAPPING_EXTRA = "subject_mapping";
     private static final int SUBJECT_LIST_LOADER_ID = 4729;
 
@@ -58,29 +60,34 @@ public class SubjectListFragment extends android.support.v4.app.Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
                 ((LinearLayoutManager) mRecyclerView.getLayoutManager()).getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
-        mRecyclerView.setAdapter(new CourseSummariesAdapter(new ArrayList<CourseSummary>(), getContext()));
+        mAdapter = new CourseSummariesAdapter(new ArrayList<CourseSummary>(), getContext());
+        mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-
+                        BaseCourseListenerFragment fragment = BaseCourseListenerFragment.createFragment(
+                                new CourseDetailPagerFragment(), mCourseSummaries.get(position));
+                        startFragment(fragment, null);
                     }
 
                     @Override
                     public void onLongItemClick(View view, int position) {
-                        // do whatever
+
                     }
                 })
         );
 
         mDescriptionText.setText(getString(R.string.subject_list_description, mSubject.getSubjectName()));
-        getLoaderManager().initLoader(SUBJECT_LIST_LOADER_ID, null, new CourseSubjectListLoaderCallbacks());
+        Log.d(LOG_TAG, mSubject.getSubjectCode() + " is being displayed");
+        getLoaderManager().restartLoader(SUBJECT_LIST_LOADER_ID, null, new CourseSubjectListLoaderCallbacks());
     }
 
     private void updateUI() {
+        setTitle(getString(R.string.subject_list_title, mSubject.getSubjectCode()));
         boolean showViews = mCourseSummaries != null && mCourseSummaries.size() != 0;
         if (showViews) {
-            if (mAdapter == null || mRecyclerView.getAdapter() == null) {
+            if (mAdapter == null || mRecyclerView.getAdapter() != mAdapter) {
                 mAdapter = new CourseSummariesAdapter(mCourseSummaries, getContext());
                 mRecyclerView.setAdapter(mAdapter);
             } else {

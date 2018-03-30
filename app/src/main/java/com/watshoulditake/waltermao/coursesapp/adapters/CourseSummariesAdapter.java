@@ -3,6 +3,7 @@ package com.watshoulditake.waltermao.coursesapp.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -14,6 +15,8 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class CourseSummariesAdapter extends RecyclerView.Adapter<CourseSummariesAdapter.CourseSummaryHolder> {
+
+    private static final String LOG_TAG = CourseSummariesAdapter.class.getSimpleName();
 
     private List<CourseSummary> mData;
     private WeakReference<Context> mContextReference;
@@ -36,6 +39,9 @@ public class CourseSummariesAdapter extends RecyclerView.Adapter<CourseSummaries
 
     @Override
     public void onBindViewHolder(@NonNull CourseSummaryHolder holder, int position) {
+        if (mData.get(position) == null) {
+            Log.e(LOG_TAG, "item is null");
+        }
         holder.bind(mData.get(position));
     }
 
@@ -46,7 +52,6 @@ public class CourseSummariesAdapter extends RecyclerView.Adapter<CourseSummaries
 
     class CourseSummaryHolder extends RecyclerView.ViewHolder {
 
-        private CourseSummary mCourseSummary;
         private TextView mCourseCodeText;
         private TextView mTitleText;
 
@@ -57,12 +62,10 @@ public class CourseSummariesAdapter extends RecyclerView.Adapter<CourseSummaries
         }
 
         public void bind(CourseSummary courseSummary) {
-            mCourseSummary = courseSummary;
             mCourseCodeText.setText(courseSummary.getCourseCode());
             mTitleText.setText(courseSummary.getTitle());
         }
 
     }
-
 
 }

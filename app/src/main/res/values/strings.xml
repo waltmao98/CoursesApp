@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CoursesApp</string>
+    <string name="app_name">Wat Can I Take?</string>
     <string name="about_tab_title">About</string>
     <string name="schedule_tab_title">Schedule</string>
     <string name="future_courses">Wat Can I Take?</string>
@@ -17,4 +17,5 @@
     <string name="empty_list_text">There are no courses that match this criteria.</string>
     <string name="home_message">Search for courses or browse courses by subject</string>
     <string name="subject_list_description">All %s courses.</string>
+    <string name="subject_list_title">%s Courses</string>
 </resources>

@@ -47,6 +47,7 @@ public class CourseDetailPagerFragment extends BaseCourseListenerFragment implem
 
     @Override
     void updateUI() {
+        setTitle(getCourseCode());
         mCourseCodeText.setText(getCourseCode());
         mTitleText.setText(getCourseSummary().getTitle());
     }
@@ -57,7 +58,7 @@ public class CourseDetailPagerFragment extends BaseCourseListenerFragment implem
         mTitleText = view.findViewById(R.id.course_title);
 
         mViewPager = view.findViewById(R.id.view_pager);
-        mPagerAdapter = new CoursePagerAdapter(getCourseSummary(), getFragmentManager(), getContext());
+        mPagerAdapter = new CoursePagerAdapter(getCourseSummary(), getChildFragmentManager(), getContext());
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setOffscreenPageLimit(mPagerAdapter.getCount() - 1);
         mTabLayout = view.findViewById(R.id.sliding_tabs);

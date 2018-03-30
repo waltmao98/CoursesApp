@@ -49,7 +49,7 @@ public abstract class BaseCourseListFragment extends BaseCourseListenerFragment 
         boolean showViews = mCourseSummaries != null && mCourseSummaries.size() != 0;
         if (showViews) {
             mDescriptionText.setText(getListDescription());
-            if (mAdapter == null || mRecyclerView.getAdapter() == null) {
+            if (mAdapter == null || mRecyclerView.getAdapter() != mAdapter) {
                 mAdapter = new CourseSummariesAdapter(mCourseSummaries, getContext());
                 mRecyclerView.setAdapter(mAdapter);
             } else {
@@ -68,7 +68,8 @@ public abstract class BaseCourseListFragment extends BaseCourseListenerFragment 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
                 ((LinearLayoutManager) mRecyclerView.getLayoutManager()).getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
-        mRecyclerView.setAdapter(new CourseSummariesAdapter(new ArrayList<CourseSummary>(), getContext()));
+        mAdapter = new CourseSummariesAdapter(new ArrayList<CourseSummary>(), getContext());
+        mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override

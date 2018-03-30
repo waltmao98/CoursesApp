@@ -9,12 +9,13 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.watshoulditake.waltermao.coursesapp.R;
-import com.watshoulditake.waltermao.coursesapp.interfaces.FragmentInteractionListener;
 import com.watshoulditake.waltermao.coursesapp.listeners.RecyclerItemClickListener;
 import com.watshoulditake.waltermao.coursesapp.loaders.SubjectsLoader;
 import com.watshoulditake.waltermao.coursesapp.model.SubjectMapping;
@@ -35,6 +36,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -58,11 +60,7 @@ public class HomeFragment extends BaseFragment {
                     @Override
                     public void onItemClick(View view, int position) {
                         SubjectListFragment fragment = SubjectListFragment.createFragment(mSubjectMappings.get(position));
-                        if (getActivity() instanceof FragmentInteractionListener) {
-                            ((FragmentInteractionListener) getActivity()).startFragment(fragment, null);
-                        } else {
-                            throw new RuntimeException("Host activity must implement FragmentInteractionListener");
-                        }
+                        startFragment(fragment, null);
                     }
 
                     @Override
@@ -76,6 +74,11 @@ public class HomeFragment extends BaseFragment {
         getLoaderManager().restartLoader(SUBJECT_LOADER_ID, null, new SubjectsLoaderCallBacks());
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.action_bar_menu, menu);
+    }
 
     private class SubjectViewHolder extends RecyclerView.ViewHolder {
 
@@ -137,6 +140,7 @@ public class HomeFragment extends BaseFragment {
         public void onLoadFinished(@NonNull Loader<Map<String, String>> loader, Map<String, String> data) {
             initializeSubjectMapping(data);
 
+            setTitle(getString(R.string.app_name));
             boolean showViews = data != null && data.size() != 0;
             if (showViews) {
                 mHomeText.setText(R.string.home_message);

@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.View;
 
 import com.watshoulditake.waltermao.coursesapp.interfaces.ChangeTabEventListener;
@@ -20,7 +19,7 @@ import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
  * - a way to broadcast a change in the current course to other child classes
  * - a way to receive broadcasts from other child classes
  */
-public abstract class BaseCourseListenerFragment extends Fragment {
+public abstract class BaseCourseListenerFragment extends BaseFragment {
 
     static final String COURSE_SUMMARY_ARG = "course_summary_arg";
     static final String COURSE_CHANGED_ACTION = "com.watshoulditake.waltermao.coursesapp.broadcast.COURSE_CHANGED_ACTION";

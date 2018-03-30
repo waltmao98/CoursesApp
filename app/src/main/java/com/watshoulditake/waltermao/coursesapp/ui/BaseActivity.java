@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.watshoulditake.waltermao.coursesapp.R;
@@ -25,14 +26,21 @@ public class BaseActivity extends AppCompatActivity implements FragmentInteracti
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
-        //Toolbar toolbar = findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.fragment_container, new HomeFragment())
-                .commit();
+        final FragmentManager fm = getSupportFragmentManager();
+
+        fm.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(fm.getBackStackEntryCount() > 0);
+            }
+        });
+
+        fm.beginTransaction().
+                add(R.id.fragment_container, new HomeFragment()).
+                commit();
     }
 
     void setSearchViewVisibility(boolean shown) {
@@ -43,10 +51,20 @@ public class BaseActivity extends AppCompatActivity implements FragmentInteracti
     public void startFragment(Fragment fragment, String tag) {
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction().
-                setCustomAnimations(R.anim.enter,R.anim.exit,R.anim.pop_enter,R.anim.pop_exit).
+                setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit).
                 replace(R.id.fragment_container, fragment).
                 addToBackStack(null).
                 commit();
     }
 
+    @Override
+    public void setTitle(String title) {
+        getSupportActionBar().setTitle(title);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        getSupportFragmentManager().popBackStack();
+        return true;
+    }
 }

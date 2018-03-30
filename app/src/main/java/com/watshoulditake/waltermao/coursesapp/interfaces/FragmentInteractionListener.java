@@ -11,4 +11,11 @@ public interface FragmentInteractionListener {
      * @param tag           tag for fragment transaction
      */
     void startFragment(Fragment childFragment, String tag);
+
+    /**
+     * Sets the title of the app bar
+     *
+     * @param title string res of the fragment's title
+     */
+    void setTitle(String title);
 }

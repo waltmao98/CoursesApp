@@ -5,7 +5,7 @@ import java.util.List;
 public class TextUtils {
 
     public static <T> String getCommaSeparatedList(List<T> list) {
-        if (list == null) {
+        if (list == null || list.size() == 0) {
             return "";
         }
         StringBuilder result = new StringBuilder();
