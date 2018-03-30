@@ -14,11 +14,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.watshoulditake.waltermao.coursesapp.R;
+import com.watshoulditake.waltermao.coursesapp.interfaces.ChangeTabEventListener;
 import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
 
 import java.lang.ref.WeakReference;
 
-public class CourseDetailPagerFragment extends BaseCourseFragment implements ChangeTabEventListener {
+public class CourseDetailPagerFragment extends BaseCourseListenerFragment implements ChangeTabEventListener {
 
     public static int ABOUT_PAGE_POSITION = 0;
 
@@ -92,15 +93,15 @@ public class CourseDetailPagerFragment extends BaseCourseFragment implements Cha
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return BaseCourseFragment.createFragment(new CourseAboutFragment(), mCourseSummary);
+                    return BaseCourseListenerFragment.createFragment(new CourseAboutFragment(), mCourseSummary);
                 case 1:
-                    BaseCourseFragment prereqsFragment = new PrereqsFragment();
+                    BaseCourseListenerFragment prereqsFragment = new PrereqsFragment();
                     prereqsFragment.setChangeTabEventListener(CourseDetailPagerFragment.this);
-                    return BaseCourseFragment.createFragment(prereqsFragment, mCourseSummary);
+                    return BaseCourseListenerFragment.createFragment(prereqsFragment, mCourseSummary);
                 case 2:
-                    BaseCourseFragment futureCoursesFragment = new FutureCoursesFragment();
+                    BaseCourseListenerFragment futureCoursesFragment = new FutureCoursesFragment();
                     futureCoursesFragment.setChangeTabEventListener(CourseDetailPagerFragment.this);
-                    return BaseCourseFragment.createFragment(futureCoursesFragment, mCourseSummary);
+                    return BaseCourseListenerFragment.createFragment(futureCoursesFragment, mCourseSummary);
                 case 3:
                     return new CourseScheduleFragment();
                 default:

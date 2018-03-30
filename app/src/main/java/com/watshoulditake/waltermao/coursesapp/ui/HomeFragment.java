@@ -3,7 +3,6 @@ package com.watshoulditake.waltermao.coursesapp.ui;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
@@ -15,13 +14,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.watshoulditake.waltermao.coursesapp.R;
+import com.watshoulditake.waltermao.coursesapp.interfaces.FragmentInteractionListener;
+import com.watshoulditake.waltermao.coursesapp.listeners.RecyclerItemClickListener;
 import com.watshoulditake.waltermao.coursesapp.loaders.SubjectsLoader;
+import com.watshoulditake.waltermao.coursesapp.model.SubjectMapping;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends BaseFragment {
 
     private static final int SUBJECT_LOADER_ID = 93935;
 
@@ -30,10 +32,15 @@ public class HomeFragment extends Fragment {
     private SubjectsListAdapter mAdapter;
     private TextView mHomeText;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        return inflater.inflate(R.layout.fragment_text_and_list, container, false);
     }
 
     @Override
@@ -46,14 +53,31 @@ public class HomeFragment extends Fragment {
                 ((LinearLayoutManager) mRecyclerView.getLayoutManager()).getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         mRecyclerView.setAdapter(new SubjectsListAdapter(new ArrayList<SubjectMapping>()));
+        mRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        SubjectListFragment fragment = SubjectListFragment.createFragment(mSubjectMappings.get(position));
+                        if (getActivity() instanceof FragmentInteractionListener) {
+                            ((FragmentInteractionListener) getActivity()).startFragment(fragment, null);
+                        } else {
+                            throw new RuntimeException("Host activity must implement FragmentInteractionListener");
+                        }
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+                    }
+                })
+        );
 
         mHomeText = view.findViewById(R.id.list_description);
 
-        getLoaderManager().initLoader(SUBJECT_LOADER_ID, null, new SubjectsLoaderCallBacks());
+        getLoaderManager().restartLoader(SUBJECT_LOADER_ID, null, new SubjectsLoaderCallBacks());
     }
 
 
-    private class SubjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class SubjectViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mSubjectCodeText;
         private TextView mSubjectNameText;
@@ -62,7 +86,6 @@ public class HomeFragment extends Fragment {
             super(inflater.inflate(R.layout.list_item_course_summary, parent, false));
             mSubjectCodeText = itemView.findViewById(R.id.course_code);
             mSubjectNameText = itemView.findViewById(R.id.course_title);
-            itemView.setOnClickListener(this);
         }
 
         public void bind(SubjectMapping mapping) {
@@ -70,10 +93,6 @@ public class HomeFragment extends Fragment {
             mSubjectNameText.setText(mapping.getSubjectName());
         }
 
-        @Override
-        public void onClick(View view) {
-
-        }
     }
 
     private class SubjectsListAdapter extends RecyclerView.Adapter<SubjectViewHolder> {
@@ -121,7 +140,7 @@ public class HomeFragment extends Fragment {
             boolean showViews = data != null && data.size() != 0;
             if (showViews) {
                 mHomeText.setText(R.string.home_message);
-                if (mAdapter == null || mRecyclerView.getAdapter() == null) {
+                if (mAdapter == null || mRecyclerView.getAdapter() != mAdapter) {
                     mAdapter = new SubjectsListAdapter(mSubjectMappings);
                     mRecyclerView.setAdapter(mAdapter);
                 } else {
@@ -148,24 +167,6 @@ public class HomeFragment extends Fragment {
         mSubjectMappings = new ArrayList<>();
         for (Map.Entry<String, String> mapping : mappings.entrySet()) {
             mSubjectMappings.add(new SubjectMapping(mapping));
-        }
-    }
-
-    public class SubjectMapping {
-        private String mSubjectCode;
-        private String mSubjectName;
-
-        public SubjectMapping(Map.Entry<String, String> mapping) {
-            mSubjectCode = mapping.getKey();
-            mSubjectName = mapping.getValue();
-        }
-
-        public String getSubjectCode() {
-            return mSubjectCode;
-        }
-
-        public String getSubjectName() {
-            return mSubjectName;
         }
     }
 }

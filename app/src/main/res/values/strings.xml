@@ -16,4 +16,5 @@
     <string name="future_courses_description">Here are some courses that require a successful completion of %s.</string>
     <string name="empty_list_text">There are no courses that match this criteria.</string>
     <string name="home_message">Search for courses or browse courses by subject</string>
+    <string name="subject_list_description">All %s courses.</string>
 </resources>

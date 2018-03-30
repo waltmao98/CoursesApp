@@ -127,7 +127,7 @@ public class CoursesDao {
         Cursor cursor = db.query(SubjectDBSchema.TABLE_NAME,
                 new String[]{SubjectDBSchema.Cols.SUBJECT_CODE, SubjectDBSchema.Cols.SUBJECT_NAME},
                 null, null, null, null,
-                SubjectDBSchema.Cols.SUBJECT_CODE + " DESC");
+                SubjectDBSchema.Cols.SUBJECT_CODE + " ASC");
         Map<String, String> subjectsMap = new LinkedHashMap<>();
         while (cursor.moveToNext()) {
             String subjectCode = cursor.getString(cursor.getColumnIndex(SubjectDBSchema.Cols.SUBJECT_CODE));

@@ -15,7 +15,7 @@ import com.watshoulditake.waltermao.coursesapp.loaders.CourseAboutLoader;
 import com.watshoulditake.waltermao.coursesapp.model.Course;
 import com.watshoulditake.waltermao.coursesapp.utils.TextUtils;
 
-public class CourseAboutFragment extends BaseCourseFragment {
+public class CourseAboutFragment extends BaseCourseListenerFragment {
 
     private static final int GET_COURSE_ABOUT_LOADER_ID = 532;
     private Course mCourse;

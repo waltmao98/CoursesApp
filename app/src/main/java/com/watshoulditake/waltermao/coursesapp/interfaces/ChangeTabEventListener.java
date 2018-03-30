@@ -1,4 +1,4 @@
-package com.watshoulditake.waltermao.coursesapp.ui;
+package com.watshoulditake.waltermao.coursesapp.interfaces;
 
 /**
  * Created by waltermao on 2018-03-25.

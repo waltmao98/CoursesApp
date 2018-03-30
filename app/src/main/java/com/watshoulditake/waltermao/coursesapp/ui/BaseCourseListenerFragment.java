@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import com.watshoulditake.waltermao.coursesapp.interfaces.ChangeTabEventListener;
 import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
 
 /**
@@ -19,7 +20,7 @@ import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
  * - a way to broadcast a change in the current course to other child classes
  * - a way to receive broadcasts from other child classes
  */
-public abstract class BaseCourseFragment extends Fragment {
+public abstract class BaseCourseListenerFragment extends Fragment {
 
     static final String COURSE_SUMMARY_ARG = "course_summary_arg";
     static final String COURSE_CHANGED_ACTION = "com.watshoulditake.waltermao.coursesapp.broadcast.COURSE_CHANGED_ACTION";
@@ -29,11 +30,11 @@ public abstract class BaseCourseFragment extends Fragment {
     ChangeTabEventListener mChangeTabEventListener;
 
     /**
-     * @param fragment      the instance of subclass of BaseCourseFragment to be created
+     * @param fragment      the instance of subclass of BaseCourseListenerFragment to be created
      * @param courseSummary the course summary that the created fragment should be associated with
-     * @return concrete instance of a subclass of BaseCourseFragment with course summary argument
+     * @return concrete instance of a subclass of BaseCourseListenerFragment with course summary argument
      */
-    public static BaseCourseFragment createFragment(BaseCourseFragment fragment, CourseSummary courseSummary) {
+    public static BaseCourseListenerFragment createFragment(BaseCourseListenerFragment fragment, CourseSummary courseSummary) {
         Bundle args = new Bundle();
         args.putParcelable(COURSE_SUMMARY_ARG, courseSummary);
         fragment.setArguments(args);

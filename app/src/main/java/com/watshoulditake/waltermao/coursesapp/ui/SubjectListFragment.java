@@ -1,6 +1,5 @@
 package com.watshoulditake.waltermao.coursesapp.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,51 +16,42 @@ import android.widget.TextView;
 import com.watshoulditake.waltermao.coursesapp.R;
 import com.watshoulditake.waltermao.coursesapp.adapters.CourseSummariesAdapter;
 import com.watshoulditake.waltermao.coursesapp.listeners.RecyclerItemClickListener;
-import com.watshoulditake.waltermao.coursesapp.loaders.CourseListLoader;
+import com.watshoulditake.waltermao.coursesapp.loaders.CourseSubjectLoader;
 import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
+import com.watshoulditake.waltermao.coursesapp.model.SubjectMapping;
 
 import java.util.ArrayList;
 import java.util.List;
 
+public class SubjectListFragment extends android.support.v4.app.Fragment {
 
-public abstract class BaseCourseListFragment extends BaseCourseListenerFragment {
+    private static final String SUBJECT_MAPPING_EXTRA = "subject_mapping";
+    private static final int SUBJECT_LIST_LOADER_ID = 4729;
 
-    private static final int COURSE_LIST_LOADER = 1239;
-
-    private RecyclerView mRecyclerView;
+    private SubjectMapping mSubject;
     private List<CourseSummary> mCourseSummaries;
-    private CourseSummariesAdapter mAdapter;
     private TextView mDescriptionText;
+    private RecyclerView mRecyclerView;
+    private CourseSummariesAdapter mAdapter;
+
+    public static SubjectListFragment createFragment(SubjectMapping subjectMapping) {
+        SubjectListFragment fragment = new SubjectListFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(SUBJECT_MAPPING_EXTRA, subjectMapping);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_base_course_list, container, false);
+        return inflater.inflate(R.layout.fragment_text_and_list, container, false);
     }
 
     @Override
-    void updateData() {
-        getLoaderManager().restartLoader(COURSE_LIST_LOADER, null, new CourseListLoaderCallbacks());
-    }
-
-    @Override
-    void updateUI() {
-        boolean showViews = mCourseSummaries != null && mCourseSummaries.size() != 0;
-        if (showViews) {
-            mDescriptionText.setText(getListDescription());
-            if (mAdapter == null || mRecyclerView.getAdapter() == null) {
-                mAdapter = new CourseSummariesAdapter(mCourseSummaries, getContext());
-                mRecyclerView.setAdapter(mAdapter);
-            } else {
-                mAdapter.setData(mCourseSummaries);
-                mAdapter.notifyDataSetChanged();
-            }
-        }
-        setViewsVisibility(showViews);
-    }
-
-    @Override
-    void initialiseViews(View view) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mSubject = getArguments().getParcelable(SUBJECT_MAPPING_EXTRA);
         mDescriptionText = view.findViewById(R.id.list_description);
         mRecyclerView = view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -73,25 +63,32 @@ public abstract class BaseCourseListFragment extends BaseCourseListenerFragment 
                 new RecyclerItemClickListener(getContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        sendCourseChangedBroadcast(mCourseSummaries.get(position));
-                        if (mChangeTabEventListener != null) {
-                            mChangeTabEventListener.changeToPage(CourseDetailPagerFragment.ABOUT_PAGE_POSITION);
-                        }
+
                     }
 
                     @Override
                     public void onLongItemClick(View view, int position) {
-
+                        // do whatever
                     }
                 })
         );
+
+        mDescriptionText.setText(getString(R.string.subject_list_description, mSubject.getSubjectName()));
+        getLoaderManager().initLoader(SUBJECT_LIST_LOADER_ID, null, new CourseSubjectListLoaderCallbacks());
     }
 
-    void sendCourseChangedBroadcast(CourseSummary courseSummary) {
-        Intent intent = new Intent();
-        intent.setAction(BaseCourseListenerFragment.COURSE_CHANGED_ACTION);
-        intent.putExtra(COURSE_SUMMARY_ARG, courseSummary);
-        getContext().sendBroadcast(intent);
+    private void updateUI() {
+        boolean showViews = mCourseSummaries != null && mCourseSummaries.size() != 0;
+        if (showViews) {
+            if (mAdapter == null || mRecyclerView.getAdapter() == null) {
+                mAdapter = new CourseSummariesAdapter(mCourseSummaries, getContext());
+                mRecyclerView.setAdapter(mAdapter);
+            } else {
+                mAdapter.setData(mCourseSummaries);
+                mAdapter.notifyDataSetChanged();
+            }
+        }
+        setViewsVisibility(showViews);
     }
 
     void setViewsVisibility(boolean shown) {
@@ -100,17 +97,11 @@ public abstract class BaseCourseListFragment extends BaseCourseListenerFragment 
         getView().findViewById(R.id.empty_text).setVisibility(shown ? View.GONE : View.VISIBLE);
     }
 
-    abstract String getListDescription();
-
-    abstract CourseListLoader getListDataLoader();
-
-    /////////////////////////////// INNER CLASSES //////////////////////////////
-
-    private class CourseListLoaderCallbacks implements LoaderManager.LoaderCallbacks<List<CourseSummary>> {
+    private class CourseSubjectListLoaderCallbacks implements LoaderManager.LoaderCallbacks<List<CourseSummary>> {
         @NonNull
         @Override
         public Loader<List<CourseSummary>> onCreateLoader(int id, Bundle args) {
-            return getListDataLoader();
+            return new CourseSubjectLoader(getContext(), mSubject.getSubjectCode());
         }
 
         @Override
