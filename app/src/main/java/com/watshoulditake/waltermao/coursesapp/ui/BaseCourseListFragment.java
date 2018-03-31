@@ -9,6 +9,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import java.util.List;
 
 public abstract class BaseCourseListFragment extends BaseCourseListenerFragment {
 
+    private static final String LOG_TAG = BaseCourseListFragment.class.getSimpleName();
     private static final int COURSE_LIST_LOADER = 1239;
 
     private RecyclerView mRecyclerView;
@@ -117,6 +119,13 @@ public abstract class BaseCourseListFragment extends BaseCourseListenerFragment 
         @Override
         public void onLoadFinished(@NonNull Loader<List<CourseSummary>> loader, List<CourseSummary> data) {
             mCourseSummaries = data;
+            if (data != null && data.size() > 0) {
+                for (int i = 0; i < data.size(); ++i) {
+                    if (data.get(i) == null) {
+                        Log.d(LOG_TAG, "data.get(" + i + ") is null.");
+                    }
+                }
+            }
             updateUI();
         }
 

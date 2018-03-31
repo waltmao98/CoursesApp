@@ -3,15 +3,13 @@ package com.watshoulditake.waltermao.coursesapp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Map;
-
 public class SubjectMapping implements Parcelable {
     private String mSubjectCode;
     private String mSubjectName;
 
-    public SubjectMapping(Map.Entry<String, String> mapping) {
-        mSubjectCode = mapping.getKey();
-        mSubjectName = mapping.getValue();
+    public SubjectMapping(String subjectCode, String subjectName) {
+        mSubjectCode = subjectCode;
+        mSubjectName = subjectName;
     }
 
     public String getSubjectCode() {

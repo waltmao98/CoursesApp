@@ -39,6 +39,7 @@ public class CourseCursorWrapper extends CursorWrapper {
             close();
             return CourseJSONUtils.JSONArrayToList(jsonCourseSummary);
         } else {
+            close();
             return null;
         }
     }

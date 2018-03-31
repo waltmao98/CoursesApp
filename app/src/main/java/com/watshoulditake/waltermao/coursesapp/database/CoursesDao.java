@@ -7,13 +7,12 @@ import android.support.annotation.WorkerThread;
 
 import com.watshoulditake.waltermao.coursesapp.model.Course;
 import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
+import com.watshoulditake.waltermao.coursesapp.model.SubjectMapping;
 
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Data access object for database
@@ -110,10 +109,16 @@ public class CoursesDao {
                 null,
                 null);
         List<String> prereqCourseCodes = cursorWrapper.getCourseCodeStringsFromJSON();
+        if (prereqCourseCodes == null) {
+            return new ArrayList<>();
+        }
 
         List<CourseSummary> prereqs = new ArrayList<>();
         for (String prereqCourseCode : prereqCourseCodes) {
-            prereqs.add(getSingleCourseSummary(prereqCourseCode));
+            CourseSummary prereqSummary = getSingleCourseSummary(prereqCourseCode);
+            if (prereqSummary != null) {
+                prereqs.add(prereqSummary);
+            }
         }
         return prereqs;
     }
@@ -122,20 +127,20 @@ public class CoursesDao {
      * @return map of subject code to subject full name
      */
     @WorkerThread
-    public Map<String, String> getSubjectMapping() {
+    public List<SubjectMapping> getSubjectMapping() {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         Cursor cursor = db.query(SubjectDBSchema.TABLE_NAME,
                 new String[]{SubjectDBSchema.Cols.SUBJECT_CODE, SubjectDBSchema.Cols.SUBJECT_NAME},
                 null, null, null, null,
                 SubjectDBSchema.Cols.SUBJECT_CODE + " ASC");
-        Map<String, String> subjectsMap = new LinkedHashMap<>();
+        List<SubjectMapping> subjectMappings = new ArrayList<>();
         while (cursor.moveToNext()) {
             String subjectCode = cursor.getString(cursor.getColumnIndex(SubjectDBSchema.Cols.SUBJECT_CODE));
             String subjectName = cursor.getString(cursor.getColumnIndex(SubjectDBSchema.Cols.SUBJECT_NAME));
-            subjectsMap.put(subjectCode, subjectName);
+            subjectMappings.add(new SubjectMapping(subjectCode, subjectName));
         }
         cursor.close();
-        return subjectsMap;
+        return subjectMappings;
     }
 
 }

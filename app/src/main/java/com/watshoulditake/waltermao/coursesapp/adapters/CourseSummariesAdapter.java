@@ -40,7 +40,7 @@ public class CourseSummariesAdapter extends RecyclerView.Adapter<CourseSummaries
     @Override
     public void onBindViewHolder(@NonNull CourseSummaryHolder holder, int position) {
         if (mData.get(position) == null) {
-            Log.e(LOG_TAG, "item is null");
+            Log.e(LOG_TAG, "item is null"); // for a bug where mData.get(position) returned null
         }
         holder.bind(mData.get(position));
     }

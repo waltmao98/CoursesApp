@@ -4,23 +4,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import com.watshoulditake.waltermao.coursesapp.R;
 import com.watshoulditake.waltermao.coursesapp.interfaces.FragmentInteractionListener;
-import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
-
-import java.util.List;
 
 public class BaseActivity extends AppCompatActivity implements FragmentInteractionListener {
 
     private static final String LOG_TAG = BaseActivity.class.getSimpleName();
-
-    private List<CourseSummary> summaries; // testing
-
-    private SearchView mSearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +29,11 @@ public class BaseActivity extends AppCompatActivity implements FragmentInteracti
             }
         });
 
-        fm.beginTransaction().
-                add(R.id.fragment_container, new HomeFragment()).
-                commit();
-    }
-
-    void setSearchViewVisibility(boolean shown) {
-        mSearchView.setVisibility(shown ? View.VISIBLE : View.GONE);
+        if (savedInstanceState == null && fm.findFragmentById(R.id.fragment_container) == null) {
+            fm.beginTransaction().
+                    add(R.id.fragment_container, new HomeFragment()).
+                    commit();
+        }
     }
 
     @Override

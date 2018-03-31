@@ -22,7 +22,6 @@ import com.watshoulditake.waltermao.coursesapp.model.SubjectMapping;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class HomeFragment extends BaseFragment {
 
@@ -77,7 +76,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.action_bar_menu, menu);
+        inflater.inflate(R.menu.action_bar_list_menu, menu);
     }
 
     private class SubjectViewHolder extends RecyclerView.ViewHolder {
@@ -128,17 +127,17 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
-    private class SubjectsLoaderCallBacks implements LoaderManager.LoaderCallbacks<Map<String, String>> {
+    private class SubjectsLoaderCallBacks implements LoaderManager.LoaderCallbacks<List<SubjectMapping>> {
 
         @NonNull
         @Override
-        public Loader<Map<String, String>> onCreateLoader(int id, @Nullable Bundle args) {
+        public Loader<List<SubjectMapping>> onCreateLoader(int id, @Nullable Bundle args) {
             return new SubjectsLoader(getContext());
         }
 
         @Override
-        public void onLoadFinished(@NonNull Loader<Map<String, String>> loader, Map<String, String> data) {
-            initializeSubjectMapping(data);
+        public void onLoadFinished(@NonNull Loader<List<SubjectMapping>> loader, List<SubjectMapping> data) {
+            mSubjectMappings = data;
 
             setTitle(getString(R.string.app_name));
             boolean showViews = data != null && data.size() != 0;
@@ -156,7 +155,7 @@ public class HomeFragment extends BaseFragment {
         }
 
         @Override
-        public void onLoaderReset(@NonNull Loader<Map<String, String>> loader) {
+        public void onLoaderReset(@NonNull Loader<List<SubjectMapping>> loader) {
 
         }
     }
@@ -165,12 +164,5 @@ public class HomeFragment extends BaseFragment {
         mRecyclerView.setVisibility(showViews ? View.VISIBLE : View.GONE);
         mHomeText.setVisibility(showViews ? View.VISIBLE : View.GONE);
         getView().findViewById(R.id.empty_text).setVisibility(showViews ? View.GONE : View.VISIBLE);
-    }
-
-    private void initializeSubjectMapping(Map<String, String> mappings) {
-        mSubjectMappings = new ArrayList<>();
-        for (Map.Entry<String, String> mapping : mappings.entrySet()) {
-            mSubjectMappings.add(new SubjectMapping(mapping));
-        }
     }
 }

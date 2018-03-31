@@ -10,6 +10,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -42,6 +44,12 @@ public class SubjectListFragment extends BaseFragment {
         args.putParcelable(SUBJECT_MAPPING_EXTRA, subjectMapping);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -83,6 +91,12 @@ public class SubjectListFragment extends BaseFragment {
         getLoaderManager().restartLoader(SUBJECT_LIST_LOADER_ID, null, new CourseSubjectListLoaderCallbacks());
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.action_bar_list_menu, menu);
+    }
+
     private void updateUI() {
         setTitle(getString(R.string.subject_list_title, mSubject.getSubjectCode()));
         boolean showViews = mCourseSummaries != null && mCourseSummaries.size() != 0;
@@ -114,6 +128,13 @@ public class SubjectListFragment extends BaseFragment {
         @Override
         public void onLoadFinished(@NonNull Loader<List<CourseSummary>> loader, List<CourseSummary> data) {
             mCourseSummaries = data;
+            if (data != null && data.size() > 0) {
+                for (int i = 0; i < data.size(); ++i) {
+                    if (data.get(i) == null) {
+                        Log.d(LOG_TAG, "data.get(" + i + ") is null");
+                    }
+                }
+            }
             updateUI();
         }
 
