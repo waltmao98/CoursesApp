@@ -28,7 +28,7 @@ import java.util.List;
  */
 public abstract class BaseListFragment
         <K extends Parcelable, D extends Parcelable>
-        extends BaseFragment<K, List<D>> {
+        extends BaseDataFragment<K, List<D>> {
 
     private RecyclerView mRecyclerView;
     private BaseListAdapter mAdapter;

@@ -7,12 +7,10 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.watshoulditake.waltermao.coursesapp.R;
 import com.watshoulditake.waltermao.coursesapp.interfaces.ChangeTabEventListener;
@@ -20,15 +18,23 @@ import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
 
 import java.lang.ref.WeakReference;
 
-public class CourseDetailPagerFragment extends BaseCourseListenerFragment implements ChangeTabEventListener {
+public class CourseDetailPagerFragment extends BaseFragment implements ChangeTabEventListener {
 
     public static int ABOUT_PAGE_POSITION = 0;
+    private static final String COURSE_SUMMARY_ARG = "course_summary_arg";
 
+    private CourseSummary mCourseSummary;
     private ViewPager mViewPager;
     private CoursePagerAdapter mPagerAdapter;
     private TabLayout mTabLayout;
-    private TextView mCourseCodeText;
-    private TextView mTitleText;
+
+    public static CourseDetailPagerFragment createFragment(CourseSummary courseSummary) {
+        CourseDetailPagerFragment fragment = new CourseDetailPagerFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(COURSE_SUMMARY_ARG,courseSummary);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Nullable
     @Override
@@ -39,38 +45,17 @@ public class CourseDetailPagerFragment extends BaseCourseListenerFragment implem
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-    }
 
-    @Override
-    void updateData() {
-        updateUI();
-    }
-
-    // not used since updateData() is overridden to directly call updateUI()
-    // this fragment doesn't have any inherent data
-    @Override
-    Loader getDataLoader() {
-        return null;
-    }
-
-    @Override
-    void updateUI() {
-        setTitle(getCourseCode());
-        mCourseCodeText.setText(getCourseCode());
-        mTitleText.setText(getCourseSummary().getTitle());
-    }
-
-    @Override
-    void initialiseViews(View view) {
-        mCourseCodeText = view.findViewById(R.id.course_code);
-        mTitleText = view.findViewById(R.id.course_title);
+        mCourseSummary = getArguments().getParcelable(COURSE_SUMMARY_ARG);
 
         mViewPager = view.findViewById(R.id.view_pager);
-        mPagerAdapter = new CoursePagerAdapter(getCourseSummary(), getChildFragmentManager(), getContext());
+        mPagerAdapter = new CoursePagerAdapter(mCourseSummary, getChildFragmentManager(), getContext());
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setOffscreenPageLimit(mPagerAdapter.getCount() - 1);
         mTabLayout = view.findViewById(R.id.sliding_tabs);
         mTabLayout.setupWithViewPager(mViewPager);
+
+        setTitle(mCourseSummary.getCourseCode());
     }
 
     @Override
@@ -78,11 +63,6 @@ public class CourseDetailPagerFragment extends BaseCourseListenerFragment implem
         if (page >= 0 && page < mPagerAdapter.getCount()) {
             mViewPager.setCurrentItem(page);
         }
-    }
-
-    @Override
-    void receiveCourseChangedBroadcast(CourseSummary summary) {
-        super.receiveCourseChangedBroadcast(summary);
     }
 
     private class CoursePagerAdapter extends FragmentPagerAdapter {
@@ -102,15 +82,15 @@ public class CourseDetailPagerFragment extends BaseCourseListenerFragment implem
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return BaseFragment.createFragment(new CourseAboutFragment(), mCourseSummary);
+                    return BaseDataFragment.createFragment(new CourseAboutFragment(), mCourseSummary);
                 case 1:
                     PrereqsFragment prereqsFragment = new PrereqsFragment();
                     prereqsFragment.setChangeTabEventListener(CourseDetailPagerFragment.this);
-                    return BaseFragment.createFragment(prereqsFragment, mCourseSummary);
+                    return BaseDataFragment.createFragment(prereqsFragment, mCourseSummary);
                 case 2:
                     FutureCoursesFragment futureCoursesFragment = new FutureCoursesFragment();
                     futureCoursesFragment.setChangeTabEventListener(CourseDetailPagerFragment.this);
-                    return BaseFragment.createFragment(futureCoursesFragment, mCourseSummary);
+                    return BaseDataFragment.createFragment(futureCoursesFragment, mCourseSummary);
                 case 3:
                     return new CourseScheduleFragment();
                 default:

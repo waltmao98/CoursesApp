@@ -37,8 +37,7 @@ public class SubjectListFragment extends BaseListFragment<SubjectMapping, Course
 
     @Override
     void onListItemClick(int position) {
-        BaseFragment fragment = BaseFragment.createFragment(
-                new CourseDetailPagerFragment(), getData().get(position));
+        CourseDetailPagerFragment fragment = CourseDetailPagerFragment.createFragment(getData().get(position));
         startFragment(fragment, null);
     }
 

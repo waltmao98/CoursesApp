@@ -32,7 +32,7 @@ public class HomeFragment extends BaseListFragment<Parcelable, SubjectMapping> {
 
     @Override
     void onListItemClick(int position) {
-        BaseFragment fragment = BaseFragment.createFragment(
+        BaseDataFragment fragment = BaseDataFragment.createFragment(
                 new SubjectListFragment(),
                 getData().get(position));
         startFragment(fragment, null);

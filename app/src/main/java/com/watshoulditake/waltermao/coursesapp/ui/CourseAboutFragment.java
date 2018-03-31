@@ -16,6 +16,7 @@ import com.watshoulditake.waltermao.coursesapp.utils.TextUtils;
 
 public class CourseAboutFragment extends BaseCourseListenerFragment<Course> {
 
+    private TextView mCourseTitle;
     private TextView mDescription;
     private TextView mPrereqs;
     private TextView mAntiReqs;
@@ -33,6 +34,7 @@ public class CourseAboutFragment extends BaseCourseListenerFragment<Course> {
 
     @Override
     public void updateUI() {
+        mCourseTitle.setText(TextUtils.isNullorEmpty(getData().getTitle()) ? "–" : getData().getTitle());
         mDescription.setText(TextUtils.isNullorEmpty(getData().getDescription()) ? "–" : getData().getDescription());
         mPrereqs.setText(TextUtils.isNullorEmpty(getData().getPrereqsString()) ? "–" : getData().getPrereqsString());
         mAntiReqs.setText(TextUtils.isNullorEmpty(getData().getAntiRequisites()) ? "–" : getData().getAntiRequisites());
@@ -45,6 +47,7 @@ public class CourseAboutFragment extends BaseCourseListenerFragment<Course> {
 
     @Override
     void initialiseViews(View view) {
+        mCourseTitle = view.findViewById(R.id.course_title);
         mDescription = view.findViewById(R.id.description);
         mPrereqs = view.findViewById(R.id.prereqs);
         mTermsOffered = view.findViewById(R.id.terms_offered);

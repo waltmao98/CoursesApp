@@ -18,7 +18,7 @@ import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
  *
  * @param <D> typeof value this fragment will display (eg. List of CourseSummary)
  */
-public abstract class BaseCourseListenerFragment<D> extends BaseFragment<CourseSummary, D> {
+public abstract class BaseCourseListenerFragment<D> extends BaseDataFragment<CourseSummary, D> {
 
     static final String COURSE_SUMMARY_ARG = "course_summary_arg";
     static final String COURSE_CHANGED_ACTION = "com.watshoulditake.waltermao.coursesapp.broadcast.COURSE_CHANGED_ACTION";
