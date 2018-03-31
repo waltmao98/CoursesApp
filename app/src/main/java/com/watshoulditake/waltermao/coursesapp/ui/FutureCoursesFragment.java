@@ -2,6 +2,7 @@ package com.watshoulditake.waltermao.coursesapp.ui;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.v4.content.Loader;
 
 import com.watshoulditake.waltermao.coursesapp.R;
 import com.watshoulditake.waltermao.coursesapp.database.CoursesDao;
@@ -13,7 +14,7 @@ import org.json.JSONException;
 import java.util.List;
 
 
-public class FutureCoursesFragment extends BaseCourseListFragment {
+public class FutureCoursesFragment extends BaseCourseListenerListFragment {
 
     @Override
     String getListDescription() {
@@ -21,7 +22,7 @@ public class FutureCoursesFragment extends BaseCourseListFragment {
     }
 
     @Override
-    CourseListLoader getListDataLoader() {
+    Loader<List<CourseSummary>> getDataLoader() {
         return new FutureCoursesListLoader(getContext(), getCourseCode());
     }
 

@@ -3,7 +3,6 @@ package com.watshoulditake.waltermao.coursesapp.ui;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +14,7 @@ import com.watshoulditake.waltermao.coursesapp.loaders.CourseAboutLoader;
 import com.watshoulditake.waltermao.coursesapp.model.Course;
 import com.watshoulditake.waltermao.coursesapp.utils.TextUtils;
 
-public class CourseAboutFragment extends BaseCourseListenerFragment {
-
-    private static final int GET_COURSE_ABOUT_LOADER_ID = 532;
-    private Course mCourse;
+public class CourseAboutFragment extends BaseCourseListenerFragment<Course> {
 
     private TextView mDescription;
     private TextView mPrereqs;
@@ -36,20 +32,15 @@ public class CourseAboutFragment extends BaseCourseListenerFragment {
     }
 
     @Override
-    void updateData() {
-        getLoaderManager().restartLoader(GET_COURSE_ABOUT_LOADER_ID, null, new CourseAboutLoaderCallbacks());
-    }
-
-    @Override
     public void updateUI() {
-        mDescription.setText(TextUtils.isNullorEmpty(mCourse.getDescription()) ? "–" : mCourse.getDescription());
-        mPrereqs.setText(TextUtils.isNullorEmpty(mCourse.getPrereqsString()) ? "–" : mCourse.getPrereqsString());
-        mAntiReqs.setText(TextUtils.isNullorEmpty(mCourse.getAntiRequisites()) ? "–" : mCourse.getAntiRequisites());
-        mTermsOffered.setText(TextUtils.isNullorEmpty(mCourse.getTermsOfferedString()) ? "–" : mCourse.getTermsOfferedString());
-        mUnits.setText(mCourse.getUnits() == null ? "–" : String.valueOf(mCourse.getUnits()));
-        mIsOnline.setText(mCourse.isOnline() != null ? (mCourse.isOnline() ? "Yes" : "No") : "–");
-        mInstructions.setText(TextUtils.isNullorEmpty(mCourse.getInstructionsString()) ? "–" : mCourse.getInstructionsString());
-        mWebUrl.setText(TextUtils.isNullorEmpty(mCourse.getURL()) ? "–" : mCourse.getURL());
+        mDescription.setText(TextUtils.isNullorEmpty(getData().getDescription()) ? "–" : getData().getDescription());
+        mPrereqs.setText(TextUtils.isNullorEmpty(getData().getPrereqsString()) ? "–" : getData().getPrereqsString());
+        mAntiReqs.setText(TextUtils.isNullorEmpty(getData().getAntiRequisites()) ? "–" : getData().getAntiRequisites());
+        mTermsOffered.setText(TextUtils.isNullorEmpty(getData().getTermsOfferedString()) ? "–" : getData().getTermsOfferedString());
+        mUnits.setText(getData().getUnits() == null ? "–" : String.valueOf(getData().getUnits()));
+        mIsOnline.setText(getData().isOnline() != null ? (getData().isOnline() ? "Yes" : "No") : "–");
+        mInstructions.setText(TextUtils.isNullorEmpty(getData().getInstructionsString()) ? "–" : getData().getInstructionsString());
+        mWebUrl.setText(TextUtils.isNullorEmpty(getData().getURL()) ? "–" : getData().getURL());
     }
 
     @Override
@@ -64,23 +55,9 @@ public class CourseAboutFragment extends BaseCourseListenerFragment {
         mWebUrl = view.findViewById(R.id.web_url);
     }
 
-    private class CourseAboutLoaderCallbacks implements LoaderManager.LoaderCallbacks<Course> {
-        @NonNull
-        @Override
-        public Loader<Course> onCreateLoader(int id, Bundle args) {
-            return new CourseAboutLoader(getContext(), getCourseCode());
-        }
-
-        @Override
-        public void onLoadFinished(@NonNull Loader<Course> loader, Course data) {
-            mCourse = data;
-            updateUI();
-        }
-
-        @Override
-        public void onLoaderReset(@NonNull Loader<Course> loader) {
-
-        }
+    @Override
+    Loader<Course> getDataLoader() {
+        return new CourseAboutLoader(getContext(), getCourseCode());
     }
-
+    
 }

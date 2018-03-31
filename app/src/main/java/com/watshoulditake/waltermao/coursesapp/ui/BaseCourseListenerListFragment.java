@@ -4,12 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,20 +15,15 @@ import android.widget.TextView;
 import com.watshoulditake.waltermao.coursesapp.R;
 import com.watshoulditake.waltermao.coursesapp.adapters.CourseSummariesAdapter;
 import com.watshoulditake.waltermao.coursesapp.listeners.RecyclerItemClickListener;
-import com.watshoulditake.waltermao.coursesapp.loaders.CourseListLoader;
 import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public abstract class BaseCourseListFragment extends BaseCourseListenerFragment {
-
-    private static final String LOG_TAG = BaseCourseListFragment.class.getSimpleName();
-    private static final int COURSE_LIST_LOADER = 1239;
+public abstract class BaseCourseListenerListFragment extends BaseCourseListenerFragment<List<CourseSummary>> {
 
     private RecyclerView mRecyclerView;
-    private List<CourseSummary> mCourseSummaries;
     private CourseSummariesAdapter mAdapter;
     private TextView mDescriptionText;
 
@@ -42,20 +34,15 @@ public abstract class BaseCourseListFragment extends BaseCourseListenerFragment 
     }
 
     @Override
-    void updateData() {
-        getLoaderManager().restartLoader(COURSE_LIST_LOADER, null, new CourseListLoaderCallbacks());
-    }
-
-    @Override
     void updateUI() {
-        boolean showViews = mCourseSummaries != null && mCourseSummaries.size() != 0;
+        boolean showViews = getData() != null && getData().size() != 0;
         if (showViews) {
             mDescriptionText.setText(getListDescription());
             if (mAdapter == null || mRecyclerView.getAdapter() != mAdapter) {
-                mAdapter = new CourseSummariesAdapter(mCourseSummaries, getContext());
+                mAdapter = new CourseSummariesAdapter(getData(), getContext());
                 mRecyclerView.setAdapter(mAdapter);
             } else {
-                mAdapter.setData(mCourseSummaries);
+                mAdapter.setData(getData());
                 mAdapter.notifyDataSetChanged();
             }
         }
@@ -76,7 +63,7 @@ public abstract class BaseCourseListFragment extends BaseCourseListenerFragment 
                 new RecyclerItemClickListener(getContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        sendCourseChangedBroadcast(mCourseSummaries.get(position));
+                        sendCourseChangedBroadcast(getData().get(position));
                         if (mChangeTabEventListener != null) {
                             mChangeTabEventListener.changeToPage(CourseDetailPagerFragment.ABOUT_PAGE_POSITION);
                         }
@@ -105,33 +92,4 @@ public abstract class BaseCourseListFragment extends BaseCourseListenerFragment 
 
     abstract String getListDescription();
 
-    abstract CourseListLoader getListDataLoader();
-
-    /////////////////////////////// INNER CLASSES //////////////////////////////
-
-    private class CourseListLoaderCallbacks implements LoaderManager.LoaderCallbacks<List<CourseSummary>> {
-        @NonNull
-        @Override
-        public Loader<List<CourseSummary>> onCreateLoader(int id, Bundle args) {
-            return getListDataLoader();
-        }
-
-        @Override
-        public void onLoadFinished(@NonNull Loader<List<CourseSummary>> loader, List<CourseSummary> data) {
-            mCourseSummaries = data;
-            if (data != null && data.size() > 0) {
-                for (int i = 0; i < data.size(); ++i) {
-                    if (data.get(i) == null) {
-                        Log.d(LOG_TAG, "data.get(" + i + ") is null.");
-                    }
-                }
-            }
-            updateUI();
-        }
-
-        @Override
-        public void onLoaderReset(@NonNull Loader<List<CourseSummary>> loader) {
-
-        }
-    }
 }

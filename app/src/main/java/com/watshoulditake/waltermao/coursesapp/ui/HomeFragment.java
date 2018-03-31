@@ -1,16 +1,18 @@
 package com.watshoulditake.waltermao.coursesapp.ui;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -23,14 +25,12 @@ import com.watshoulditake.waltermao.coursesapp.model.SubjectMapping;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment<Parcelable, List<SubjectMapping>> {
 
-    private static final int SUBJECT_LOADER_ID = 93935;
-
-    private List<SubjectMapping> mSubjectMappings;
     private RecyclerView mRecyclerView;
     private SubjectsListAdapter mAdapter;
     private TextView mHomeText;
+    private SearchView mSearchView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,9 +45,44 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.action_bar_list_menu, menu);
 
+        MenuItem menuItemSearchView = menu.findItem(R.id.action_search);
+        mSearchView = (SearchView) menuItemSearchView.getActionView();
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+        });
+    }
+
+    @Override
+    void updateUI() {
+        setTitle(getString(R.string.app_name));
+        boolean showViews = getData() != null && getData().size() != 0;
+        if (showViews) {
+            mHomeText.setText(R.string.home_message);
+            if (mAdapter == null || mRecyclerView.getAdapter() != mAdapter) {
+                mAdapter = new SubjectsListAdapter(getData());
+                mRecyclerView.setAdapter(mAdapter);
+            } else {
+                mAdapter.setData(getData());
+                mAdapter.notifyDataSetChanged();
+            }
+        }
+        setViewsVisibility(showViews);
+    }
+
+    @Override
+    void initialiseViews(View view) {
         mRecyclerView = view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
@@ -58,7 +93,9 @@ public class HomeFragment extends BaseFragment {
                 new RecyclerItemClickListener(getContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        SubjectListFragment fragment = SubjectListFragment.createFragment(mSubjectMappings.get(position));
+                        BaseFragment fragment = BaseFragment.createFragment(
+                                new SubjectListFragment(),
+                                getData().get(position));
                         startFragment(fragment, null);
                     }
 
@@ -67,16 +104,18 @@ public class HomeFragment extends BaseFragment {
                     }
                 })
         );
-
         mHomeText = view.findViewById(R.id.list_description);
-
-        getLoaderManager().restartLoader(SUBJECT_LOADER_ID, null, new SubjectsLoaderCallBacks());
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.action_bar_list_menu, menu);
+    Loader<List<SubjectMapping>> getDataLoader() {
+        return new SubjectsLoader(getContext());
+    }
+
+    private void setViewsVisibility(boolean showViews) {
+        mRecyclerView.setVisibility(showViews ? View.VISIBLE : View.GONE);
+        mHomeText.setVisibility(showViews ? View.VISIBLE : View.GONE);
+        getView().findViewById(R.id.empty_text).setVisibility(showViews ? View.GONE : View.VISIBLE);
     }
 
     private class SubjectViewHolder extends RecyclerView.ViewHolder {
@@ -118,51 +157,12 @@ public class HomeFragment extends BaseFragment {
 
         @Override
         public void onBindViewHolder(@NonNull SubjectViewHolder holder, int position) {
-            holder.bind(mSubjectMappings.get(position));
+            holder.bind(getData().get(position));
         }
 
         @Override
         public int getItemCount() {
             return mData.size();
         }
-    }
-
-    private class SubjectsLoaderCallBacks implements LoaderManager.LoaderCallbacks<List<SubjectMapping>> {
-
-        @NonNull
-        @Override
-        public Loader<List<SubjectMapping>> onCreateLoader(int id, @Nullable Bundle args) {
-            return new SubjectsLoader(getContext());
-        }
-
-        @Override
-        public void onLoadFinished(@NonNull Loader<List<SubjectMapping>> loader, List<SubjectMapping> data) {
-            mSubjectMappings = data;
-
-            setTitle(getString(R.string.app_name));
-            boolean showViews = data != null && data.size() != 0;
-            if (showViews) {
-                mHomeText.setText(R.string.home_message);
-                if (mAdapter == null || mRecyclerView.getAdapter() != mAdapter) {
-                    mAdapter = new SubjectsListAdapter(mSubjectMappings);
-                    mRecyclerView.setAdapter(mAdapter);
-                } else {
-                    mAdapter.setData(mSubjectMappings);
-                    mAdapter.notifyDataSetChanged();
-                }
-            }
-            setViewsVisibility(showViews);
-        }
-
-        @Override
-        public void onLoaderReset(@NonNull Loader<List<SubjectMapping>> loader) {
-
-        }
-    }
-
-    private void setViewsVisibility(boolean showViews) {
-        mRecyclerView.setVisibility(showViews ? View.VISIBLE : View.GONE);
-        mHomeText.setVisibility(showViews ? View.VISIBLE : View.GONE);
-        getView().findViewById(R.id.empty_text).setVisibility(showViews ? View.GONE : View.VISIBLE);
     }
 }

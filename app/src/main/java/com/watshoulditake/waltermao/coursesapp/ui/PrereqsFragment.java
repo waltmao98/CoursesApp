@@ -2,6 +2,7 @@ package com.watshoulditake.waltermao.coursesapp.ui;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.v4.content.Loader;
 
 import com.watshoulditake.waltermao.coursesapp.R;
 import com.watshoulditake.waltermao.coursesapp.database.CoursesDao;
@@ -12,7 +13,7 @@ import org.json.JSONException;
 
 import java.util.List;
 
-public class PrereqsFragment extends BaseCourseListFragment {
+public class PrereqsFragment extends BaseCourseListenerListFragment {
 
     private static final String LOG_TAG = PrereqsFragment.class.getSimpleName();
 
@@ -22,7 +23,7 @@ public class PrereqsFragment extends BaseCourseListFragment {
     }
 
     @Override
-    CourseListLoader getListDataLoader() {
+    Loader<List<CourseSummary>> getDataLoader() {
         return new PrereqListLoader(getContext(), getCourseCode());
     }
 

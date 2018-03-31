@@ -4,10 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
 import android.support.annotation.CallSuper;
-import android.support.annotation.Nullable;
-import android.view.View;
 
 import com.watshoulditake.waltermao.coursesapp.interfaces.ChangeTabEventListener;
 import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
@@ -18,35 +15,16 @@ import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
  * - a necessary CourseSummary instance to identify which course to associate with
  * - a way to broadcast a change in the current course to other child classes
  * - a way to receive broadcasts from other child classes
+ *
+ * @param <D> typeof value this fragment will display (eg. List of CourseSummary)
  */
-public abstract class BaseCourseListenerFragment extends BaseFragment {
+public abstract class BaseCourseListenerFragment<D> extends BaseFragment<CourseSummary, D> {
 
     static final String COURSE_SUMMARY_ARG = "course_summary_arg";
     static final String COURSE_CHANGED_ACTION = "com.watshoulditake.waltermao.coursesapp.broadcast.COURSE_CHANGED_ACTION";
 
     private CourseChangedReceiver mReceiver;
-    private CourseSummary mCourseSummary;
     ChangeTabEventListener mChangeTabEventListener;
-
-    /**
-     * @param fragment      the instance of subclass of BaseCourseListenerFragment to be created
-     * @param courseSummary the course summary that the created fragment should be associated with
-     * @return concrete instance of a subclass of BaseCourseListenerFragment with course summary argument
-     */
-    public static BaseCourseListenerFragment createFragment(BaseCourseListenerFragment fragment, CourseSummary courseSummary) {
-        Bundle args = new Bundle();
-        args.putParcelable(COURSE_SUMMARY_ARG, courseSummary);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mCourseSummary = getArguments().getParcelable(COURSE_SUMMARY_ARG);
-        initialiseViews(view);
-        updateData();
-    }
 
     @Override
     public void onStart() {
@@ -63,11 +41,11 @@ public abstract class BaseCourseListenerFragment extends BaseFragment {
     }
 
     CourseSummary getCourseSummary() {
-        return mCourseSummary;
+        return getKey();
     }
 
     String getCourseCode() {
-        return mCourseSummary.getCourseCode();
+        return getKey().getCourseCode();
     }
 
     void setChangeTabEventListener(ChangeTabEventListener listener) {
@@ -76,25 +54,9 @@ public abstract class BaseCourseListenerFragment extends BaseFragment {
 
     @CallSuper
     void receiveCourseChangedBroadcast(CourseSummary summary) {
-        mCourseSummary = summary;
+        setKey(summary);
         updateData();
     }
-
-    /**
-     * Re-fetches data associated with the current course summary
-     */
-    abstract void updateData();
-
-    /**
-     * Should be called once the data in updateData() has been fetched - somewhere in the method chain of
-     * a call to updateData()
-     */
-    abstract void updateUI();
-
-    /**
-     * Get access to all views via rootView.findViewById
-     */
-    abstract void initialiseViews(View view);
 
     private class CourseChangedReceiver extends BroadcastReceiver {
         @Override

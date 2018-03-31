@@ -7,6 +7,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +44,13 @@ public class CourseDetailPagerFragment extends BaseCourseListenerFragment implem
     @Override
     void updateData() {
         updateUI();
+    }
+
+    // not used since updateData() is overridden to directly call updateUI()
+    // this fragment doesn't have any inherent data
+    @Override
+    Loader getDataLoader() {
+        return null;
     }
 
     @Override
@@ -94,15 +102,15 @@ public class CourseDetailPagerFragment extends BaseCourseListenerFragment implem
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return BaseCourseListenerFragment.createFragment(new CourseAboutFragment(), mCourseSummary);
+                    return BaseFragment.createFragment(new CourseAboutFragment(), mCourseSummary);
                 case 1:
-                    BaseCourseListenerFragment prereqsFragment = new PrereqsFragment();
+                    PrereqsFragment prereqsFragment = new PrereqsFragment();
                     prereqsFragment.setChangeTabEventListener(CourseDetailPagerFragment.this);
-                    return BaseCourseListenerFragment.createFragment(prereqsFragment, mCourseSummary);
+                    return BaseFragment.createFragment(prereqsFragment, mCourseSummary);
                 case 2:
-                    BaseCourseListenerFragment futureCoursesFragment = new FutureCoursesFragment();
+                    FutureCoursesFragment futureCoursesFragment = new FutureCoursesFragment();
                     futureCoursesFragment.setChangeTabEventListener(CourseDetailPagerFragment.this);
-                    return BaseCourseListenerFragment.createFragment(futureCoursesFragment, mCourseSummary);
+                    return BaseFragment.createFragment(futureCoursesFragment, mCourseSummary);
                 case 3:
                     return new CourseScheduleFragment();
                 default:
