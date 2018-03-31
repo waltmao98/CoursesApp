@@ -2,8 +2,6 @@ package com.watshoulditake.waltermao.coursesapp.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -14,20 +12,13 @@ import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-public class CourseSummariesAdapter extends RecyclerView.Adapter<CourseSummariesAdapter.CourseSummaryHolder> {
+public class CourseSummariesAdapter extends BaseListAdapter<CourseSummary> {
 
-    private static final String LOG_TAG = CourseSummariesAdapter.class.getSimpleName();
-
-    private List<CourseSummary> mData;
     private WeakReference<Context> mContextReference;
 
     public CourseSummariesAdapter(List<CourseSummary> data, Context context) {
-        mData = data;
+        super(data);
         mContextReference = new WeakReference<>(context);
-    }
-
-    public void setData(List<CourseSummary> data) {
-        mData = data;
     }
 
     @NonNull
@@ -37,20 +28,7 @@ public class CourseSummariesAdapter extends RecyclerView.Adapter<CourseSummaries
         return new CourseSummaryHolder(inflater, parent);
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull CourseSummaryHolder holder, int position) {
-        if (mData.get(position) == null) {
-            Log.e(LOG_TAG, "item is null"); // for a bug where mData.get(position) returned null
-        }
-        holder.bind(mData.get(position));
-    }
-
-    @Override
-    public int getItemCount() {
-        return mData.size();
-    }
-
-    class CourseSummaryHolder extends RecyclerView.ViewHolder {
+    class CourseSummaryHolder extends BaseViewHolder {
 
         private TextView mCourseCodeText;
         private TextView mTitleText;
@@ -61,6 +39,7 @@ public class CourseSummariesAdapter extends RecyclerView.Adapter<CourseSummaries
             mTitleText = itemView.findViewById(R.id.course_title);
         }
 
+        @Override
         public void bind(CourseSummary courseSummary) {
             mCourseCodeText.setText(courseSummary.getCourseCode());
             mTitleText.setText(courseSummary.getTitle());

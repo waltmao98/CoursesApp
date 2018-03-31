@@ -44,6 +44,11 @@ public abstract class BaseFragment<K extends Parcelable, D> extends Fragment {
         }
     }
 
+    /**
+     * 1. get key from arguments, if it exists
+     * 2. initialise views, which gets references to each view
+     * 3. updateData(), which will eventually call updateUI()
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -86,8 +91,8 @@ public abstract class BaseFragment<K extends Parcelable, D> extends Fragment {
     }
 
     /**
-     * Should be called once the data in updateData() has been fetched - somewhere in the method chain of
-     * a call to updateData(). Typically should be called in Loader.OnLoadFinished
+     * Called once the data in updateData() has been fetched - somewhere in the method chain of
+     * a call to updateData(). Default behaviour is to call in Loader.OnLoadFinished
      */
     abstract void updateUI();
 

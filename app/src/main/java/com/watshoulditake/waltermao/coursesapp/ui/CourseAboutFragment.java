@@ -59,5 +59,5 @@ public class CourseAboutFragment extends BaseCourseListenerFragment<Course> {
     Loader<Course> getDataLoader() {
         return new CourseAboutLoader(getContext(), getCourseCode());
     }
-    
+
 }
