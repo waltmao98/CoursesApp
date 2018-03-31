@@ -1,4 +1,4 @@
-package com.watshoulditake.waltermao.coursesapp.ui;
+package com.watshoulditake.waltermao.coursesapp.ui.base;
 
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -22,7 +22,7 @@ public abstract class BaseDataFragment<K extends Parcelable, D> extends BaseFrag
     private K mKey;
     private D mData;
 
-    public static <K extends Parcelable> BaseDataFragment createFragment(BaseDataFragment fragment, K key) {
+    public static <K extends Parcelable, F extends BaseDataFragment> F createFragment(F fragment, K key) {
         Bundle args = new Bundle();
         args.putParcelable(KEY_ARG, key);
         fragment.setArguments(args);
@@ -44,26 +44,26 @@ public abstract class BaseDataFragment<K extends Parcelable, D> extends BaseFrag
         updateData();
     }
 
-    void setKey(K key) {
+    public void setKey(K key) {
         mKey = key;
     }
 
-    K getKey() {
+    public K getKey() {
         return mKey;
     }
 
-    void setData(D data) {
+    public void setData(D data) {
         mData = data;
     }
 
-    D getData() {
+    public D getData() {
         return mData;
     }
 
     /**
      * Re-fetches data associated with the current course summary
      */
-    void updateData() {
+    public void updateData() {
         getLoaderManager().restartLoader(DATA_LOADER_ID, null, new DataLoaderCallbacks());
     }
 
@@ -71,17 +71,17 @@ public abstract class BaseDataFragment<K extends Parcelable, D> extends BaseFrag
      * Called once the data in updateData() has been fetched - somewhere in the method chain of
      * a call to updateData(). Default behaviour is to call in Loader.OnLoadFinished
      */
-    abstract void updateUI();
+    public abstract void updateUI();
 
     /**
      * Get access to all views via rootView.findViewById
      */
-    abstract void initialiseViews(View view);
+    public abstract void initialiseViews(View view);
 
     /**
      * @return data loader that loads the fragment's data from database
      */
-    abstract Loader<D> getDataLoader();
+    public abstract Loader<D> getDataLoader();
 
     /**
      * (Re)Loads data and then calls updateUI();

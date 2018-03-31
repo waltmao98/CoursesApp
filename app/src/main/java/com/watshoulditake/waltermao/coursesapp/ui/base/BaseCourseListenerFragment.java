@@ -1,4 +1,4 @@
-package com.watshoulditake.waltermao.coursesapp.ui;
+package com.watshoulditake.waltermao.coursesapp.ui.base;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -40,20 +40,16 @@ public abstract class BaseCourseListenerFragment<D> extends BaseDataFragment<Cou
         getContext().unregisterReceiver(mReceiver);
     }
 
-    CourseSummary getCourseSummary() {
-        return getKey();
-    }
-
-    String getCourseCode() {
+    public String getCourseCode() {
         return getKey().getCourseCode();
     }
 
-    void setChangeTabEventListener(ChangeTabEventListener listener) {
+    public void setChangeTabEventListener(ChangeTabEventListener listener) {
         mChangeTabEventListener = listener;
     }
 
     @CallSuper
-    void receiveCourseChangedBroadcast(CourseSummary summary) {
+    public void receiveCourseChangedBroadcast(CourseSummary summary) {
         setKey(summary);
         updateData();
     }

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.watshoulditake.waltermao.coursesapp.R;
 import com.watshoulditake.waltermao.coursesapp.loaders.CourseAboutLoader;
 import com.watshoulditake.waltermao.coursesapp.model.Course;
+import com.watshoulditake.waltermao.coursesapp.ui.base.BaseCourseListenerFragment;
 import com.watshoulditake.waltermao.coursesapp.utils.TextUtils;
 
 public class CourseAboutFragment extends BaseCourseListenerFragment<Course> {
@@ -46,7 +47,7 @@ public class CourseAboutFragment extends BaseCourseListenerFragment<Course> {
     }
 
     @Override
-    void initialiseViews(View view) {
+    public void initialiseViews(View view) {
         mCourseTitle = view.findViewById(R.id.course_title);
         mDescription = view.findViewById(R.id.description);
         mPrereqs = view.findViewById(R.id.prereqs);
@@ -59,7 +60,7 @@ public class CourseAboutFragment extends BaseCourseListenerFragment<Course> {
     }
 
     @Override
-    Loader<Course> getDataLoader() {
+    public Loader<Course> getDataLoader() {
         return new CourseAboutLoader(getContext(), getCourseCode());
     }
 

@@ -8,6 +8,7 @@ import com.watshoulditake.waltermao.coursesapp.R;
 import com.watshoulditake.waltermao.coursesapp.database.CoursesDao;
 import com.watshoulditake.waltermao.coursesapp.loaders.CourseListLoader;
 import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
+import com.watshoulditake.waltermao.coursesapp.ui.base.BaseCourseListenerListFragment;
 
 import org.json.JSONException;
 
@@ -17,12 +18,12 @@ import java.util.List;
 public class FutureCoursesFragment extends BaseCourseListenerListFragment {
 
     @Override
-    String getListDescription() {
+    public String getListDescription() {
         return getString(R.string.future_courses_description, getCourseCode());
     }
 
     @Override
-    Loader<List<CourseSummary>> getDataLoader() {
+    public Loader<List<CourseSummary>> getDataLoader() {
         return new FutureCoursesListLoader(getContext(), getCourseCode());
     }
 

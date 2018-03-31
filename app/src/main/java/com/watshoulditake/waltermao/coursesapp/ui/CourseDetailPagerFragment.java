@@ -9,12 +9,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.watshoulditake.waltermao.coursesapp.R;
 import com.watshoulditake.waltermao.coursesapp.interfaces.ChangeTabEventListener;
 import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
+import com.watshoulditake.waltermao.coursesapp.ui.base.BaseDataFragment;
+import com.watshoulditake.waltermao.coursesapp.ui.base.BaseFragment;
 
 import java.lang.ref.WeakReference;
 
@@ -56,6 +60,12 @@ public class CourseDetailPagerFragment extends BaseFragment implements ChangeTab
         mTabLayout.setupWithViewPager(mViewPager);
 
         setTitle(mCourseSummary.getCourseCode());
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.findItem(R.id.action_search).setVisible(false);
     }
 
     @Override
@@ -119,4 +129,6 @@ public class CourseDetailPagerFragment extends BaseFragment implements ChangeTab
             }
         }
     }
+
+
 }

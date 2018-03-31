@@ -1,21 +1,26 @@
-package com.watshoulditake.waltermao.coursesapp.ui;
+package com.watshoulditake.waltermao.coursesapp.ui.base;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.watshoulditake.waltermao.coursesapp.R;
 import com.watshoulditake.waltermao.coursesapp.adapters.BaseListAdapter;
 import com.watshoulditake.waltermao.coursesapp.listeners.RecyclerItemClickListener;
+import com.watshoulditake.waltermao.coursesapp.ui.SearchResultsFragment;
+import com.watshoulditake.waltermao.coursesapp.utils.ParcelableString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,16 +40,15 @@ public abstract class BaseListFragment
     private TextView mTopText;
     private SearchView mSearchView;
 
+    @Nullable
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_text_and_list,container,false);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.action_bar_list_menu, menu);
 
         MenuItem menuItemSearchView = menu.findItem(R.id.action_search);
         mSearchView = (SearchView) menuItemSearchView.getActionView();
@@ -56,17 +60,19 @@ public abstract class BaseListFragment
 
             @Override
             public boolean onQueryTextSubmit(String query) {
+                SearchResultsFragment fragment = BaseDataFragment.createFragment(new SearchResultsFragment(), new ParcelableString(query));
+                startFragment(fragment,null);
                 return false;
             }
         });
     }
 
     @Override
-    void updateUI() {
-        setTitle(getString(R.string.app_name));
+    public void updateUI() {
+        setTitle(getTitle());
         boolean showViews = getData() != null && getData().size() != 0;
         if (showViews) {
-            mTopText.setText(R.string.home_message);
+            mTopText.setText(getListDescription());
             if (mAdapter == null || mRecyclerView.getAdapter() != mAdapter) {
                 mAdapter = createAdapter(getData());
                 mRecyclerView.setAdapter(mAdapter);
@@ -79,7 +85,7 @@ public abstract class BaseListFragment
     }
 
     @Override
-    void initialiseViews(View view) {
+    public void initialiseViews(View view) {
         mRecyclerView = view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
@@ -108,10 +114,13 @@ public abstract class BaseListFragment
         getView().findViewById(R.id.empty_text).setVisibility(showViews ? View.GONE : View.VISIBLE);
     }
 
-    abstract BaseListAdapter createAdapter(List<D> data);
+    public abstract BaseListAdapter createAdapter(List<D> data);
 
-    abstract void onListItemClick(int position);
+    public abstract void onListItemClick(int position);
 
+    public abstract String getListDescription();
+
+    public abstract String getTitle();
 }
 
 

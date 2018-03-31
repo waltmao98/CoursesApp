@@ -1,4 +1,4 @@
-package com.watshoulditake.waltermao.coursesapp.ui;
+package com.watshoulditake.waltermao.coursesapp.ui.base;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,11 +16,14 @@ import com.watshoulditake.waltermao.coursesapp.R;
 import com.watshoulditake.waltermao.coursesapp.adapters.CourseSummariesAdapter;
 import com.watshoulditake.waltermao.coursesapp.listeners.RecyclerItemClickListener;
 import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
+import com.watshoulditake.waltermao.coursesapp.ui.CourseDetailPagerFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Base class for course list screens that listen for course change
+ */
 public abstract class BaseCourseListenerListFragment extends BaseCourseListenerFragment<List<CourseSummary>> {
 
     private RecyclerView mRecyclerView;
@@ -34,7 +37,7 @@ public abstract class BaseCourseListenerListFragment extends BaseCourseListenerF
     }
 
     @Override
-    void updateUI() {
+    public void updateUI() {
         boolean showViews = getData() != null && getData().size() != 0;
         if (showViews) {
             mDescriptionText.setText(getListDescription());
@@ -50,7 +53,7 @@ public abstract class BaseCourseListenerListFragment extends BaseCourseListenerF
     }
 
     @Override
-    void initialiseViews(View view) {
+    public void initialiseViews(View view) {
         mDescriptionText = view.findViewById(R.id.list_description);
         mRecyclerView = view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -77,19 +80,20 @@ public abstract class BaseCourseListenerListFragment extends BaseCourseListenerF
         );
     }
 
-    void sendCourseChangedBroadcast(CourseSummary courseSummary) {
+    public void sendCourseChangedBroadcast(CourseSummary courseSummary) {
+        setTitle(courseSummary.getCourseCode());
         Intent intent = new Intent();
         intent.setAction(BaseCourseListenerFragment.COURSE_CHANGED_ACTION);
         intent.putExtra(COURSE_SUMMARY_ARG, courseSummary);
         getContext().sendBroadcast(intent);
     }
 
-    void setViewsVisibility(boolean shown) {
+    private void setViewsVisibility(boolean shown) {
         mRecyclerView.setVisibility(shown ? View.VISIBLE : View.GONE);
         mDescriptionText.setVisibility(shown ? View.VISIBLE : View.GONE);
         getView().findViewById(R.id.empty_text).setVisibility(shown ? View.GONE : View.VISIBLE);
     }
 
-    abstract String getListDescription();
+    public abstract String getListDescription();
 
 }
