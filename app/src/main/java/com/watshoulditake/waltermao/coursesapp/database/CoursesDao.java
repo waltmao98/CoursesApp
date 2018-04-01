@@ -2,6 +2,7 @@ package com.watshoulditake.waltermao.coursesapp.database;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.WorkerThread;
 
@@ -17,6 +18,7 @@ import java.util.List;
 /**
  * Data access object for database
  */
+@WorkerThread
 public class CoursesDao {
 
     private static CoursesDao sCoursesDao;
@@ -33,26 +35,23 @@ public class CoursesDao {
         return sCoursesDao;
     }
 
-    @WorkerThread
     public List<CourseSummary> getPrerequitesList(String courseCode) throws JSONException {
         return getJSONCourseSummaryList(courseCode, CoursesDBSchema.Cols.PREREQS_LIST);
     }
 
-    @WorkerThread
     public List<CourseSummary> getFutureCourses(String courseCode) throws JSONException {
         return getJSONCourseSummaryList(courseCode, CoursesDBSchema.Cols.FUTURE_COURSES_LIST);
     }
 
-    @WorkerThread
     public List<CourseSummary> querySubject(String subject) {
         CourseCursorWrapper cursorWrapper = mDbHelper.queryCourses(null,
                 CoursesDBSchema.Cols.SUBJECT + "= ?",
                 new String[]{subject},
-                null, null, null);
+                null, null,
+                CoursesDBSchema.Cols.CATOLOG_NUMBER + " ASC");
         return cursorWrapper.getCourseSummaries();
     }
 
-    @WorkerThread
     public Course getCourseDetail(String courseCode) {
         CourseCursorWrapper cursorWrapper = mDbHelper.queryCourses(null,
                 CoursesDBSchema.Cols.COURSE_CODE + "= ?",
@@ -61,7 +60,6 @@ public class CoursesDao {
         return cursorWrapper.getCourseDetails();
     }
 
-    @WorkerThread
     public CourseSummary getSingleCourseSummary(String courseCode) {
         CourseCursorWrapper cursorWrapper = mDbHelper.queryCourses(
                 CoursesDBSchema.Cols.COURSE_SUMMARY_COLS,
@@ -74,7 +72,6 @@ public class CoursesDao {
         return cursorWrapper.getSingleCourseSummary();
     }
 
-    @WorkerThread
     public List<CourseSummary> querySearchTerm(String searchTerm) {
         String sqlSearchTerm = "%" + searchTerm + "%";
         CourseCursorWrapper cursorWrapper = mDbHelper.queryCourses(null,
@@ -86,7 +83,6 @@ public class CoursesDao {
         return cursorWrapper.getCourseSummaries();
     }
 
-    @WorkerThread
     public List<CourseSummary> getAllCourses() {
         CourseCursorWrapper cursorWrapper = mDbHelper.queryCourses(
                 null, null, null, CoursesDBSchema.Cols.SUBJECT, null, null);
@@ -99,7 +95,6 @@ public class CoursesDao {
      * @return course summaries list of the courses in the json array string
      * @throws JSONException if given column is not a json array string
      */
-    @WorkerThread
     private List<CourseSummary> getJSONCourseSummaryList(String courseCode, String column) throws JSONException {
         CourseCursorWrapper cursorWrapper = mDbHelper.queryCourses(
                 new String[]{column},
@@ -126,7 +121,6 @@ public class CoursesDao {
     /**
      * @return map of subject code to subject full name
      */
-    @WorkerThread
     public List<SubjectMapping> getSubjectMapping() {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         Cursor cursor = db.query(SubjectDBSchema.TABLE_NAME,
@@ -136,11 +130,21 @@ public class CoursesDao {
         List<SubjectMapping> subjectMappings = new ArrayList<>();
         while (cursor.moveToNext()) {
             String subjectCode = cursor.getString(cursor.getColumnIndex(SubjectDBSchema.Cols.SUBJECT_CODE));
-            String subjectName = cursor.getString(cursor.getColumnIndex(SubjectDBSchema.Cols.SUBJECT_NAME));
-            subjectMappings.add(new SubjectMapping(subjectCode, subjectName));
+            // only add subjects that have at least one course
+            if (getCourseCountForSubject(subjectCode) > 0) {
+                String subjectName = cursor.getString(cursor.getColumnIndex(SubjectDBSchema.Cols.SUBJECT_NAME));
+                subjectMappings.add(new SubjectMapping(subjectCode, subjectName));
+            }
         }
         cursor.close();
         return subjectMappings;
+    }
+
+    private long getCourseCountForSubject(String subject) {
+        return DatabaseUtils.queryNumEntries(
+                mDbHelper.getReadableDatabase(),
+                CoursesDBSchema.TABLE_NAME,
+                CoursesDBSchema.Cols.SUBJECT + "=\'" + subject + "\'");
     }
 
 }

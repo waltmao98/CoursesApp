@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <TextView
@@ -9,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/double_space"
-        android:layout_marginBottom="@dimen/space" />
+        android:layout_marginBottom="@dimen/space"
+        android:textColor="@color/black" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -17,7 +19,12 @@
         android:layout_height="match_parent"
         android:focusable="true"
         android:clickable="true"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical"
+        app:fastScrollEnabled="true"
+        app:fastScrollHorizontalThumbDrawable="@drawable/thumb_drawable"
+        app:fastScrollHorizontalTrackDrawable="@drawable/line_drawable"
+        app:fastScrollVerticalThumbDrawable="@drawable/thumb_drawable"
+        app:fastScrollVerticalTrackDrawable="@drawable/line_drawable" />
 
     <TextView
         android:id="@+id/empty_text"
@@ -25,6 +32,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/empty_list_text"
+        android:layout_gravity="center"
+        android:textColor="@color/black"
+        android:gravity="center" />
+
+    <ProgressBar
+        android:id="@+id/progress_spinner"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         android:gravity="center" />
 

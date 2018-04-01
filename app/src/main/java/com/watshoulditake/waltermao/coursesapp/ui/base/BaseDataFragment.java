@@ -7,6 +7,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.View;
+import android.widget.ProgressBar;
+
+import com.watshoulditake.waltermao.coursesapp.R;
+import com.watshoulditake.waltermao.coursesapp.utils.ViewUtils;
 
 /**
  * Base fragment for all fragments that display data from the database
@@ -21,6 +25,7 @@ public abstract class BaseDataFragment<K extends Parcelable, D> extends BaseFrag
 
     private K mKey;
     private D mData;
+    private ProgressBar mProgressSpinner;
 
     public static <K extends Parcelable, F extends BaseDataFragment> F createFragment(F fragment, K key) {
         Bundle args = new Bundle();
@@ -41,6 +46,7 @@ public abstract class BaseDataFragment<K extends Parcelable, D> extends BaseFrag
             mKey = getArguments().getParcelable(KEY_ARG);
         }
         initialiseViews(view);
+        mProgressSpinner = view.findViewById(R.id.progress_spinner);
         updateData();
     }
 
@@ -90,18 +96,34 @@ public abstract class BaseDataFragment<K extends Parcelable, D> extends BaseFrag
         @NonNull
         @Override
         public Loader<D> onCreateLoader(int id, Bundle args) {
+            ViewUtils.setViewsVisibility(getView(), false);
+            setContentVisibility(false);
             return getDataLoader();
         }
 
         @Override
         public void onLoadFinished(@NonNull Loader<D> loader, D data) {
             mData = data;
+            ViewUtils.setViewsVisibility(getView(), true);
+            setContentVisibility(true);
             updateUI();
         }
 
         @Override
         public void onLoaderReset(@NonNull Loader<D> loader) {
 
+        }
+    }
+
+    /**
+     * @param show true if contents of this view should be shown, false if contents
+     *             should be hidden and progress spinner should be shown
+     */
+    private void setContentVisibility(boolean show) {
+        ViewUtils.setViewsVisibility(getView(), show);
+        if (mProgressSpinner != null) {
+            mProgressSpinner.setVisibility(show ? View.GONE : View.VISIBLE);
+            mProgressSpinner.setEnabled(!show);
         }
     }
 }

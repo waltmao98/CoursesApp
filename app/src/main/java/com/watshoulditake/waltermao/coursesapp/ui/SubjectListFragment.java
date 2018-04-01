@@ -32,7 +32,7 @@ public class SubjectListFragment extends BaseListFragment<SubjectMapping, Course
 
     @Override
     public String getListDescription() {
-        return getString(R.string.subject_list_description,getKey().getSubjectCode());
+        return getString(R.string.subject_list_description, getKey().getSubjectCode());
     }
 
     @Override

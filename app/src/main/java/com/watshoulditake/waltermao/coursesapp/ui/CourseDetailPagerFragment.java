@@ -35,7 +35,7 @@ public class CourseDetailPagerFragment extends BaseFragment implements ChangeTab
     public static CourseDetailPagerFragment createFragment(CourseSummary courseSummary) {
         CourseDetailPagerFragment fragment = new CourseDetailPagerFragment();
         Bundle args = new Bundle();
-        args.putParcelable(COURSE_SUMMARY_ARG,courseSummary);
+        args.putParcelable(COURSE_SUMMARY_ARG, courseSummary);
         fragment.setArguments(args);
         return fragment;
     }

@@ -12,16 +12,16 @@ import com.watshoulditake.waltermao.coursesapp.utils.ParcelableString;
 
 import java.util.List;
 
-public class SearchResultsFragment extends BaseListFragment<ParcelableString,CourseSummary> {
+public class SearchResultsFragment extends BaseListFragment<ParcelableString, CourseSummary> {
 
     @Override
     public Loader<List<CourseSummary>> getDataLoader() {
-        return new SearchTermLoader(getContext(),getKey().getString());
+        return new SearchTermLoader(getContext(), getKey().getString());
     }
 
     @Override
     public BaseListAdapter createAdapter(List<CourseSummary> data) {
-        return new CourseSummariesAdapter(data,getContext());
+        return new CourseSummariesAdapter(data, getContext());
     }
 
     @Override
@@ -33,11 +33,13 @@ public class SearchResultsFragment extends BaseListFragment<ParcelableString,Cou
 
     @Override
     public String getListDescription() {
-        return getString(R.string.search_results_text,getKey().getString());
+        return getString(R.string.search_results_text, getKey().getString());
     }
 
     @Override
     public String getTitle() {
         return getString(R.string.search_results_title);
     }
+
+
 }

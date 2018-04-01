@@ -14,7 +14,6 @@ import com.watshoulditake.waltermao.coursesapp.ui.HomeFragment;
 
 public class BaseActivity extends AppCompatActivity implements FragmentInteractionListener {
 
-    private static final String LOG_TAG = BaseActivity.class.getSimpleName();
     private static final String HOME_FRAGMENT_TAG = "home";
 
     @Override
@@ -36,7 +35,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentInteracti
 
         if (savedInstanceState == null && fm.findFragmentById(R.id.fragment_container) == null) {
             fm.beginTransaction().
-                    add(R.id.fragment_container, new HomeFragment(),HOME_FRAGMENT_TAG).
+                    add(R.id.fragment_container, new HomeFragment(), HOME_FRAGMENT_TAG).
                     commit();
         }
     }
@@ -50,8 +49,8 @@ public class BaseActivity extends AppCompatActivity implements FragmentInteracti
         menuItemButton.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                if(getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                    getSupportFragmentManager().popBackStack(null,FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
                 return true;
             }
