@@ -11,8 +11,6 @@ import java.util.List;
  */
 public class CourseJSONUtils {
 
-    private static final String LOG_TAG = CourseJSONUtils.class.getSimpleName();
-
     /**
      * @param jsonArrayString json array string representation of data
      * @return ArrayList representation of {@code jsonArrayString} data
@@ -30,5 +28,9 @@ public class CourseJSONUtils {
             // json string is [] (empty list)
             return new ArrayList<>();
         }
+    }
+
+    public static <T> List<T> JSONArrayToList(JSONArray jsonArray) throws JSONException {
+        return JSONArrayToList(jsonArray.toString());
     }
 }

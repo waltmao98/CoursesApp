@@ -10,8 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/double_space"
-        android:layout_marginBottom="@dimen/space"
-        android:textColor="@color/black" />
+        android:layout_marginBottom="@dimen/space" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -33,7 +32,6 @@
         android:layout_height="match_parent"
         android:text="@string/empty_list_text"
         android:layout_gravity="center"
-        android:textColor="@color/black"
         android:gravity="center" />
 
     <ProgressBar

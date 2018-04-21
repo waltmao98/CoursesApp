@@ -102,7 +102,9 @@ public class CourseDetailPagerFragment extends BaseFragment implements ChangeTab
                     futureCoursesFragment.setChangeTabEventListener(CourseDetailPagerFragment.this);
                     return BaseDataFragment.createFragment(futureCoursesFragment, mCourseSummary);
                 case 3:
-                    return new CourseScheduleFragment();
+                    CourseScheduleFragment courseScheduleFragment = new CourseScheduleFragment();
+                    courseScheduleFragment.setChangeTabEventListener(CourseDetailPagerFragment.this);
+                    return BaseDataFragment.createFragment(courseScheduleFragment, mCourseSummary);
                 default:
                     return null;
             }

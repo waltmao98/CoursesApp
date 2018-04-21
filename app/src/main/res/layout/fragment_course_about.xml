@@ -16,7 +16,6 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/font_text_title"
             android:textStyle="bold"
-            android:textColor="@color/black"
             android:layout_marginBottom="@dimen/space" />
 
         <!-- Description -->
