@@ -36,7 +36,7 @@ public abstract class BaseListAdapter<D extends Parcelable> extends RecyclerView
             super(itemView);
         }
 
-        public abstract void bind(D item);
+        public abstract void bind(@NonNull D item);
     }
 
 }

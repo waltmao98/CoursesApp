@@ -2,5 +2,7 @@
 <resources>
     <dimen name="space">10dp</dimen>
     <dimen name="double_space">20dp</dimen>
+    <dimen name="triple_space">30dp</dimen>
+    <dimen name="quadruple_space">40dp</dimen>
     <dimen name="font_text_title">18sp</dimen>
 </resources>

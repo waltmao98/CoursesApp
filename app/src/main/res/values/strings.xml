@@ -24,4 +24,8 @@
     <string name="search_results_text">Showing courses matching \"%s\"</string>
     <string name="search_results_title">Search Results</string>
     <string name="home">Home</string>
+    <string name="dash_binary_separator_format">%s - %s</string>
+    <string name="number_spots_format">Seats: %d/%d</string>
+    <string name="no_schedule_found">No schedule could be found for %s.</string>
+    <string name="schedule_for_course">Schedule for %s.</string>
 </resources>

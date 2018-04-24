@@ -54,10 +54,10 @@ public class CourseScheduleLoader extends BaseLoader<List<CourseSchedule>> {
         if (!responseJSON.has(JSONKeys.DATA)) {
             throw new JSONException("Response JSON is missing data");
         }
-        JSONArray courseSchedulesJSON = responseJSON.getJSONArray("data");
+        JSONArray courseSchedulesJSON = responseJSON.optJSONArray("data");
         List<CourseSchedule> courseSchedules = new ArrayList<>();
         for (int i = 0; i < courseSchedulesJSON.length(); ++i) {
-            CourseSchedule schedule = convertJSONToSchedule((courseSchedulesJSON.getJSONObject(i)));
+            CourseSchedule schedule = convertJSONToSchedule((courseSchedulesJSON.optJSONObject(i)));
             courseSchedules.add(schedule);
         }
         return courseSchedules;
@@ -65,32 +65,57 @@ public class CourseScheduleLoader extends BaseLoader<List<CourseSchedule>> {
 
     private CourseSchedule convertJSONToSchedule(JSONObject courseScheduleJSON) throws JSONException {
         CourseSchedule schedule = new CourseSchedule();
-        schedule.setCourseCode(courseScheduleJSON.getString(JSONKeys.SUBJECT)
-                + courseScheduleJSON.getString(JSONKeys.CATALOG_NUMBER));
-        schedule.setSection(courseScheduleJSON.getString(JSONKeys.SECTION));
-        schedule.setCampus(courseScheduleJSON.getString(JSONKeys.CAMPUS));
-        schedule.setCapacity(courseScheduleJSON.getInt(JSONKeys.CAPACITY));
-        schedule.setOccupied(courseScheduleJSON.getInt(JSONKeys.OCCUPIED));
-        schedule.setTerm(courseScheduleJSON.getInt(JSONKeys.TERM));
+        schedule.setCourseCode(courseScheduleJSON.optString(JSONKeys.SUBJECT)
+                + courseScheduleJSON.optString(JSONKeys.CATALOG_NUMBER));
+        if (!isNullLiteral(courseScheduleJSON, JSONKeys.SECTION)) {
+            schedule.setSection(courseScheduleJSON.optString(JSONKeys.SECTION));
+        }
+        if (!isNullLiteral(courseScheduleJSON, JSONKeys.CAMPUS)) {
+            schedule.setCampus(courseScheduleJSON.optString(JSONKeys.CAMPUS));
+        }
+        schedule.setCapacity(courseScheduleJSON.optInt(JSONKeys.CAPACITY));
+        schedule.setOccupied(courseScheduleJSON.optInt(JSONKeys.OCCUPIED));
+        schedule.setTerm(courseScheduleJSON.optInt(JSONKeys.TERM));
 
-        JSONObject classJSON = courseScheduleJSON.getJSONArray(JSONKeys.CLASSES).getJSONObject(0);
+        JSONObject classJSON = courseScheduleJSON.optJSONArray(JSONKeys.CLASSES).optJSONObject(0);
 
-        JSONObject dateJSON = classJSON.getJSONObject(JSONKeys.DATE);
-        schedule.setStartTime(dateJSON.getString(JSONKeys.START_TIME));
-        schedule.setEndTime(dateJSON.getString(JSONKeys.END_TIME));
-        schedule.setWeekDays(dateJSON.getString(JSONKeys.WEEKDAYS));
+        // date
+        JSONObject dateJSON = classJSON.optJSONObject(JSONKeys.DATE);
+        if (!isNullLiteral(dateJSON, JSONKeys.START_TIME)) {
+            schedule.setStartTime(dateJSON.optString(JSONKeys.START_TIME));
+        }
+        if (!isNullLiteral(dateJSON, JSONKeys.END_TIME)) {
+            schedule.setEndTime(dateJSON.optString(JSONKeys.END_TIME));
+        }
+        if (!isNullLiteral(dateJSON, JSONKeys.WEEKDAYS)) {
+            schedule.setWeekDays(dateJSON.optString(JSONKeys.WEEKDAYS));
+        }
 
-        JSONObject locationJSON = classJSON.getJSONObject(JSONKeys.LOCATION);
+        // location
+        JSONObject locationJSON = classJSON.optJSONObject(JSONKeys.LOCATION);
         ClassLocation classLocation = new ClassLocation();
-        classLocation.setBuilding(locationJSON.getString(JSONKeys.BUILDING));
-        classLocation.setRoom(locationJSON.getString(JSONKeys.ROOM));
+        if (!isNullLiteral(locationJSON, JSONKeys.BUILDING)) {
+            classLocation.setBuilding(locationJSON.optString(JSONKeys.BUILDING));
+        }
+        if (!isNullLiteral(locationJSON, JSONKeys.ROOM)) {
+            classLocation.setRoom(locationJSON.optString(JSONKeys.ROOM));
+        }
         schedule.setClassLocation(classLocation);
 
-        JSONArray instructorsJSON = classJSON.getJSONArray(JSONKeys.INSTRUCTORS);
+        JSONArray instructorsJSON = classJSON.optJSONArray(JSONKeys.INSTRUCTORS);
 
         List<String> instructors = CourseJSONUtils.JSONArrayToList(instructorsJSON);
         schedule.setInstructors(instructors);
 
         return schedule;
+    }
+
+    /**
+     * UW API returns JSON object with "null" as keys. This method exists to check for this obscurity
+     *
+     * @return true if the literal string "null" is the value for the given key, else false
+     */
+    private boolean isNullLiteral(JSONObject jsonObject, String key) {
+        return jsonObject.optString(key).equals("null");
     }
 }

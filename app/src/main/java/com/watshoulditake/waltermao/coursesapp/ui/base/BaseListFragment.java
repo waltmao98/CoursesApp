@@ -7,11 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -19,16 +15,12 @@ import android.widget.TextView;
 import com.watshoulditake.waltermao.coursesapp.R;
 import com.watshoulditake.waltermao.coursesapp.adapters.BaseListAdapter;
 import com.watshoulditake.waltermao.coursesapp.listeners.RecyclerItemClickListener;
-import com.watshoulditake.waltermao.coursesapp.ui.SearchResultsFragment;
-import com.watshoulditake.waltermao.coursesapp.utils.ParcelableString;
-import com.watshoulditake.waltermao.coursesapp.utils.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Base class for general list fragment. General list fragments have a searchview
- * in app bar
+ * Base class for general list fragment.
  *
  * @param <K> {@inheritDoc}
  * @param <D> List of this type
@@ -40,49 +32,11 @@ public abstract class BaseListFragment
     private RecyclerView mRecyclerView;
     private BaseListAdapter mAdapter;
     private TextView mTopText;
-    private SearchView mSearchView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_base_course_list, container, false);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        ViewUtils.hideSoftKeyboard(mSearchView, getContext());
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-
-        final MenuItem menuItemSearchView = menu.findItem(R.id.action_search);
-        mSearchView = (SearchView) menuItemSearchView.getActionView();
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                SearchResultsFragment fragment = BaseDataFragment.createFragment(new SearchResultsFragment(), new ParcelableString(query));
-                startFragment(fragment, null);
-                return false;
-            }
-        });
-
-        mSearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean queryTextFocused) {
-                if (!queryTextFocused) {
-                    menuItemSearchView.collapseActionView();
-                    mSearchView.setQuery("", false);
-                }
-            }
-        });
+        return inflater.inflate(R.layout.fragment_base_list, container, false);
     }
 
     @Override

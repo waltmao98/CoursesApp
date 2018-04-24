@@ -1,8 +1,11 @@
 package com.watshoulditake.waltermao.coursesapp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
-public class CourseSchedule {
+public class CourseSchedule implements Parcelable {
 
     private String mCourseCode;
 
@@ -113,6 +116,56 @@ public class CourseSchedule {
     public void setTerm(int term) {
         mTerm = term;
     }
+
+    public CourseSchedule() {
+
+    }
+
+    /////////////////////////// PARCELABLE /////////////////////////
+
+    protected CourseSchedule(Parcel in) {
+        mCourseCode = in.readString();
+        mSection = in.readString();
+        mCampus = in.readString();
+        mCapacity = in.readInt();
+        mOccupied = in.readInt();
+        mStartTime = in.readString();
+        mEndTime = in.readString();
+        mWeekDays = in.readString();
+        mInstructors = in.createStringArrayList();
+        mTerm = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mCourseCode);
+        dest.writeString(mSection);
+        dest.writeString(mCampus);
+        dest.writeInt(mCapacity);
+        dest.writeInt(mOccupied);
+        dest.writeString(mStartTime);
+        dest.writeString(mEndTime);
+        dest.writeString(mWeekDays);
+        dest.writeStringList(mInstructors);
+        dest.writeInt(mTerm);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<CourseSchedule> CREATOR = new Creator<CourseSchedule>() {
+        @Override
+        public CourseSchedule createFromParcel(Parcel in) {
+            return new CourseSchedule(in);
+        }
+
+        @Override
+        public CourseSchedule[] newArray(int size) {
+            return new CourseSchedule[size];
+        }
+    };
 
     @Override
     public boolean equals(Object obj) {

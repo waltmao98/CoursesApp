@@ -14,11 +14,11 @@ import com.watshoulditake.waltermao.coursesapp.adapters.BaseListAdapter;
 import com.watshoulditake.waltermao.coursesapp.loaders.SubjectsLoader;
 import com.watshoulditake.waltermao.coursesapp.model.SubjectMapping;
 import com.watshoulditake.waltermao.coursesapp.ui.base.BaseDataFragment;
-import com.watshoulditake.waltermao.coursesapp.ui.base.BaseListFragment;
+import com.watshoulditake.waltermao.coursesapp.ui.base.BaseListSearchViewFragment;
 
 import java.util.List;
 
-public class HomeFragment extends BaseListFragment<Parcelable, SubjectMapping> {
+public class HomeFragment extends BaseListSearchViewFragment<Parcelable, SubjectMapping> {
 
     @Override
     public SubjectsListAdapter createAdapter(List<SubjectMapping> data) {

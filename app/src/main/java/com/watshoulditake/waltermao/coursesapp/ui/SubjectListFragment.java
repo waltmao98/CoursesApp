@@ -8,11 +8,11 @@ import com.watshoulditake.waltermao.coursesapp.adapters.CourseSummariesAdapter;
 import com.watshoulditake.waltermao.coursesapp.loaders.CourseSubjectLoader;
 import com.watshoulditake.waltermao.coursesapp.model.CourseSummary;
 import com.watshoulditake.waltermao.coursesapp.model.SubjectMapping;
-import com.watshoulditake.waltermao.coursesapp.ui.base.BaseListFragment;
+import com.watshoulditake.waltermao.coursesapp.ui.base.BaseListSearchViewFragment;
 
 import java.util.List;
 
-public class SubjectListFragment extends BaseListFragment<SubjectMapping, CourseSummary> {
+public class SubjectListFragment extends BaseListSearchViewFragment<SubjectMapping, CourseSummary> {
 
     @Override
     public Loader<List<CourseSummary>> getDataLoader() {
