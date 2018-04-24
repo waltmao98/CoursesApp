@@ -177,7 +177,8 @@
                 android:id="@+id/web_url"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:autoLink="web" />
+                android:autoLink="web"
+                android:textIsSelectable="true"/>
 
         </LinearLayout>
 

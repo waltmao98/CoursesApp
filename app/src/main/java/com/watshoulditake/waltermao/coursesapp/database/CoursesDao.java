@@ -74,12 +74,20 @@ public class CoursesDao {
 
     public List<CourseSummary> querySearchTerm(String searchTerm) {
         String sqlSearchTerm = "%" + searchTerm + "%";
+        String orderBy = CoursesDBSchema.Cols.COURSE_CODE + " = \"" + searchTerm + "\" DESC," +
+                CoursesDBSchema.Cols.COURSE_CODE + " LIKE \"%" + searchTerm + "%\" DESC," +
+                CoursesDBSchema.Cols.TITLE + " = \"" + searchTerm + "\" DESC," +
+                CoursesDBSchema.Cols.TITLE + " LIKE \"%" + searchTerm + "%\" DESC," +
+                CoursesDBSchema.Cols.DESCRIPTION + " = \"" + searchTerm + "\" DESC," +
+                CoursesDBSchema.Cols.DESCRIPTION + " LIKE \"%" + searchTerm + "%\" DESC";
+
         CourseCursorWrapper cursorWrapper = mDbHelper.queryCourses(null,
                 CoursesDBSchema.Cols.COURSE_CODE + " LIKE ? COLLATE NOCASE" +
+                        " OR " + CoursesDBSchema.Cols.COURSE_CODE + " LIKE ? COLLATE NOCASE" +
                         " OR " + CoursesDBSchema.Cols.TITLE + " LIKE ? COLLATE NOCASE" +
                         " OR " + CoursesDBSchema.Cols.DESCRIPTION + " LIKE ? COLLATE NOCASE",
-                new String[]{sqlSearchTerm, sqlSearchTerm, sqlSearchTerm},
-                null, null, null);
+                new String[]{sqlSearchTerm, sqlSearchTerm.replaceAll("\\s+", ""), sqlSearchTerm, sqlSearchTerm},
+                null, null, orderBy);
         return cursorWrapper.getCourseSummaries();
     }
 
