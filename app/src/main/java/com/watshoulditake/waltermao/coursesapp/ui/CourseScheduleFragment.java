@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,11 +28,12 @@ public class CourseScheduleFragment extends BaseCourseListenerFragment<List<Cour
     private RecyclerView mRecyclerView;
     private ScheduleListAdapter mAdapter;
     private TextView mTopText;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_base_list, container, false);
+        return inflater.inflate(R.layout.fragment_swipe_to_refresh_list, container, false);
     }
 
     @Override
@@ -62,6 +64,13 @@ public class CourseScheduleFragment extends BaseCourseListenerFragment<List<Cour
         mTopText = view.findViewById(R.id.list_description);
         ((TextView) view.findViewById(R.id.empty_text)).setText(
                 getString(R.string.no_schedule_found, getKey().getCourseCode()));
+        mSwipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                updateData();
+            }
+        });
     }
 
     @Override

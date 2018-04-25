@@ -11,9 +11,16 @@
         android:layout_margin="@dimen/double_space"
         android:layout_marginBottom="@dimen/space" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        style="@style/CoursesAppRecyclerView" />
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            style="@style/CoursesAppRecyclerView"
+            android:id="@+id/recycler_view" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <TextView
         android:id="@+id/empty_text"
