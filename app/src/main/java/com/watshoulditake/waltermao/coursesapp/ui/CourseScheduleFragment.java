@@ -79,6 +79,7 @@ public class CourseScheduleFragment extends BaseCourseListenerFragment<List<Cour
     }
 
     private void setViewsVisibility(boolean showViews) {
+        mSwipeRefreshLayout.setVisibility(showViews ? View.VISIBLE : View.GONE);
         mRecyclerView.setVisibility(showViews ? View.VISIBLE : View.GONE);
         mTopText.setVisibility(showViews ? View.VISIBLE : View.GONE);
         getView().findViewById(R.id.empty_text).setVisibility(showViews ? View.GONE : View.VISIBLE);

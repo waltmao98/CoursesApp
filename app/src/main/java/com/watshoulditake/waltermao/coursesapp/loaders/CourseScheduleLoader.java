@@ -1,6 +1,7 @@
 package com.watshoulditake.waltermao.coursesapp.loaders;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -42,7 +43,7 @@ public class CourseScheduleLoader extends BaseLoader<List<CourseSchedule>> {
                 "?key=" + NetworkUtils.UW_API_KEY;
         String responseJSONString = NetworkUtils.executeRequest(requestUrl);
         try {
-            JSONObject responseJSON = new JSONObject(responseJSONString);
+            JSONObject responseJSON = new JSONObject(responseJSONString != null ? responseJSONString : "");
             return convertJSONToSchedulesList(responseJSON);
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Error in parsing course schedule json", e);
@@ -50,7 +51,7 @@ public class CourseScheduleLoader extends BaseLoader<List<CourseSchedule>> {
         }
     }
 
-    private List<CourseSchedule> convertJSONToSchedulesList(JSONObject responseJSON) throws JSONException {
+    private List<CourseSchedule> convertJSONToSchedulesList(@NonNull JSONObject responseJSON) throws JSONException {
         if (!responseJSON.has(JSONKeys.DATA)) {
             throw new JSONException("Response JSON is missing data");
         }

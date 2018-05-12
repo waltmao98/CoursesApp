@@ -104,8 +104,9 @@ public abstract class BaseDataFragment<K extends Parcelable, D> extends BaseFrag
         @Override
         public void onLoadFinished(@NonNull Loader<D> loader, D data) {
             mData = data;
-            ViewUtils.setViewsVisibility(getView(), true);
-            setContentVisibility(true);
+            boolean loadSuccessful = data != null;
+            ViewUtils.setViewsVisibility(getView(), loadSuccessful);
+            setContentVisibility(loadSuccessful);
             updateUI();
         }
 

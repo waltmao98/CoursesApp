@@ -29,6 +29,8 @@ public class CourseSchedule implements Parcelable {
 
     private int mTerm;
 
+    private String mTermString;
+
     public String getCourseCode() {
         return mCourseCode;
     }
@@ -124,6 +126,7 @@ public class CourseSchedule implements Parcelable {
     /////////////////////////// PARCELABLE /////////////////////////
 
     protected CourseSchedule(Parcel in) {
+        mClassLocation = in.readParcelable(ClassLocation.class.getClassLoader());
         mCourseCode = in.readString();
         mSection = in.readString();
         mCampus = in.readString();
@@ -134,10 +137,12 @@ public class CourseSchedule implements Parcelable {
         mWeekDays = in.readString();
         mInstructors = in.createStringArrayList();
         mTerm = in.readInt();
+        mTermString = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(mClassLocation, flags);
         dest.writeString(mCourseCode);
         dest.writeString(mSection);
         dest.writeString(mCampus);
@@ -148,6 +153,7 @@ public class CourseSchedule implements Parcelable {
         dest.writeString(mWeekDays);
         dest.writeStringList(mInstructors);
         dest.writeInt(mTerm);
+        dest.writeString(mTermString);
     }
 
     @Override

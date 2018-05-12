@@ -11,7 +11,9 @@
         android:orientation="vertical"
         android:layout_marginLeft="@dimen/triple_space"
         android:layout_marginRight="@dimen/space"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:layout_marginStart="@dimen/triple_space"
+        android:layout_marginEnd="@dimen/space">
 
         <TextView
             android:id="@+id/section"
@@ -37,7 +39,8 @@
         android:orientation="vertical"
         android:layout_gravity="end|right"
         android:layout_marginRight="@dimen/quadruple_space"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:layout_marginEnd="@dimen/quadruple_space">
 
         <TextView
             android:id="@+id/time"
