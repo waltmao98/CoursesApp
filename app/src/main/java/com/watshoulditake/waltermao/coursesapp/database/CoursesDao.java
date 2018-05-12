@@ -2,7 +2,6 @@ package com.watshoulditake.waltermao.coursesapp.database;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.WorkerThread;
 
@@ -138,21 +137,11 @@ public class CoursesDao {
         List<SubjectMapping> subjectMappings = new ArrayList<>();
         while (cursor.moveToNext()) {
             String subjectCode = cursor.getString(cursor.getColumnIndex(SubjectDBSchema.Cols.SUBJECT_CODE));
-            // only add subjects that have at least one course
-            if (getCourseCountForSubject(subjectCode) > 0) {
-                String subjectName = cursor.getString(cursor.getColumnIndex(SubjectDBSchema.Cols.SUBJECT_NAME));
-                subjectMappings.add(new SubjectMapping(subjectCode, subjectName));
-            }
+            String subjectName = cursor.getString(cursor.getColumnIndex(SubjectDBSchema.Cols.SUBJECT_NAME));
+            subjectMappings.add(new SubjectMapping(subjectCode, subjectName));
         }
         cursor.close();
         return subjectMappings;
-    }
-
-    private long getCourseCountForSubject(String subject) {
-        return DatabaseUtils.queryNumEntries(
-                mDbHelper.getReadableDatabase(),
-                CoursesDBSchema.TABLE_NAME,
-                CoursesDBSchema.Cols.SUBJECT + "=\'" + subject + "\'");
     }
 
 }
